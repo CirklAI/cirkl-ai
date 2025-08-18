@@ -69,7 +69,7 @@ export default function Sidebar() {
                     alert("User already exists. Please try logging in instead or use a different email address.");
                     return;
                 } else if (response.status === 401) {
-                    alert("Unauthorized? Something is amiss.");
+                    alert("Email or password incorrect!");
                     return;
                 } else if (response.status === 400) {
                     alert("Invalid request. Please check your input and try again.");
