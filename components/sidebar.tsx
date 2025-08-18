@@ -69,7 +69,7 @@ export default function Sidebar() {
                     alert("User already exists. Please try logging in instead or use a different email address.");
                     return;
                 } else if (response.status === 401) {
-                    alert("Rate limited. Please try again later.");
+                    alert("Unauthorized? Something is amiss.");
                     return;
                 } else if (response.status === 400) {
                     alert("Invalid request. Please check your input and try again.");
@@ -106,12 +106,10 @@ export default function Sidebar() {
     return (
         <>
             <div className="fixed bottom-0 left-0 w-full border-t bg-sidebar border-sidebar-border md:top-0 md:w-26 md:h-screen md:border-r flex md:flex-col items-center z-[1000]">
-                {/* Desktop Logo */}
                 <div className="hidden md:flex items-center justify-center p-4">
                     <IconCirkl size={32} />
                 </div>
 
-                {/* Desktop Navigation */}
                 <nav className="hidden md:flex md:flex-col items-center gap-2 w-full mt-4">
                     <Link href="/">
                         <ButtonIcon icon={IconHome} title="Home" size={24} />
@@ -121,7 +119,6 @@ export default function Sidebar() {
                     </Link>
                 </nav>
 
-                {/* Mobile Navigation (Single Line) */}
                 <nav className="flex md:hidden items-center justify-around w-full p-1">
                     <Link href="/">
                         <ButtonIcon icon={IconHome} title="Home" size={24} />
@@ -171,7 +168,6 @@ export default function Sidebar() {
                     <ThemeToggle />
                 </nav>
 
-                {/* Desktop User Info */}
                 <div className="hidden md:flex flex-col items-center mt-auto mb-2 relative">
                     {userInfo ? (
                         <div className="flex flex-col items-center gap-2">
