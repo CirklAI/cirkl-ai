@@ -47,7 +47,7 @@ function ThreatOverview({ result }: { result: ScanResult }) {
                         </div>
                     )}
                     <div>
-                        <h3 className="text-xl font-bold text-foreground">Threat Assessment</h3>
+                        <h3 className="text-lg sm:text-xl font-bold text-foreground">Threat Assessment</h3>
                         <p className="text-muted-foreground">Security scan results</p>
                     </div>
                 </div>
@@ -71,7 +71,7 @@ function ThreatOverview({ result }: { result: ScanResult }) {
                         <div className="flex justify-between items-start gap-4">
                             <span className="text-secondary-foreground">Detection Reason</span>
                             <span
-                                className="text-purple-400 text-right text-sm max-w-xs">{result.detection_reason}</span>
+                                className="text-purple-400 text-right text-sm max-w-sm">{result.detection_reason}</span>
                         </div>
                     )}
 
@@ -118,7 +118,7 @@ function FileProperties({ result }: { result: ScanResult }) {
 
                     <div className="bg-mini-card/50 rounded-lg p-3">
                         <div className="text-muted-foreground text-xs uppercase tracking-wide mb-2">SHA256 Hash</div>
-                        <div className="text-secondary-foreground font-mono text-xs break-all bg-card p-2 rounded">
+                        <div className="text-secondary-foreground font-mono text-sm break-all bg-card p-3 rounded">
                             {result.sha256_hash || "Not available"}
                         </div>
                     </div>
@@ -256,11 +256,11 @@ function SuspiciousStrings({ result }: { result: ScanResult }) {
                             </span>
                         </div>
 
-                        <div className="bg-secondary/50 rounded-lg p-3 max-h-48 overflow-y-auto">
+                        <div className="bg-secondary/50 rounded-lg p-3 max-h-64 overflow-y-auto">
                             {result.suspicions.map((str, i) => (
-                                <div key={i} className="mb-2 last:mb-0">
+                                <div key={i} className="mb-3 last:mb-0">
                                     <code
-                                        className="text-orange-300 bg-card px-2 py-1 rounded text-xs font-mono break-all">
+                                        className="text-orange-300 bg-card px-3 py-2 rounded text-sm font-mono break-all">
                                         {JSON.stringify(str)}
                                     </code>
                                 </div>
@@ -344,7 +344,7 @@ export default function DashboardPage() {
 
     return (
         <div className="bg-background text-foreground">
-            <div className="container mx-auto mt-10 px-6 py-8">
+            <div className="container mx-auto mt-10 sm:px-6 px-4 py-8">
                 {loading && (
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -391,7 +391,7 @@ export default function DashboardPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <Card border={false} className="mb-8 bg-transparent flex flex-col items-center justify-center h-[75vh] space-y-6">
+                        <Card border={false} className="mb-8 bg-transparent flex flex-col items-center justify-center h-[80vh] space-y-6">
                             <CardContent className="p-8">
                                 <div className="text-center">
                                     <div className="p-4 bg-secondary/20 rounded-full w-fit mx-auto mb-4">

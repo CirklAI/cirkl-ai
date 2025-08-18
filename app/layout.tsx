@@ -31,7 +31,7 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col md:flex-row`}
         >
           <Sidebar />
-          <div className="flex-1">
+          <div className="flex-1 pb-24 md:pb-0 lg:ml-26">
             {children}
           </div>
         </body>
