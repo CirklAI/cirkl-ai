@@ -105,12 +105,14 @@ export default function Sidebar() {
 
     return (
         <>
-            <div className="top-0 left-0 fixed h-screen w-26 border-r bg-sidebar border-sidebar-border flex flex-col items-center z-[1000]">
-                <div className="flex items-center justify-center p-4">
+            <div className="fixed bottom-0 left-0 w-full border-t bg-sidebar border-sidebar-border md:top-0 md:w-26 md:h-screen md:border-r flex md:flex-col items-center z-[1000]">
+                {/* Desktop Logo */}
+                <div className="hidden md:flex items-center justify-center p-4">
                     <IconCirkl size={32} />
                 </div>
 
-                <nav className="flex flex-col items-center gap-2 w-full">
+                {/* Desktop Navigation */}
+                <nav className="hidden md:flex md:flex-col items-center gap-2 w-full mt-4">
                     <Link href="/">
                         <ButtonIcon icon={IconHome} title="Home" size={24} />
                     </Link>
@@ -119,7 +121,58 @@ export default function Sidebar() {
                     </Link>
                 </nav>
 
-                <div className="mt-auto mb-2 relative">
+                {/* Mobile Navigation (Single Line) */}
+                <nav className="flex md:hidden items-center justify-around w-full p-1">
+                    <Link href="/">
+                        <ButtonIcon icon={IconHome} title="Home" size={24} />
+                    </Link>
+                    <Link href="/dashboard">
+                        <ButtonIcon icon={IconShield} title="Dashboard" size={24} />
+                    </Link>
+                    {userInfo ? (
+                        <div className="relative">
+                            <button
+                                ref={userButtonRef}
+                                onClick={() => setShowUserMenu(!showUserMenu)}
+                                className="flex flex-col items-center p-2 rounded-lg hover:bg-muted-foreground/10 transition-colors"
+                            >
+                                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground text-sm">
+                                    <span className="text-xl font-bold">
+                                        {userInfo.full_name.charAt(0).toUpperCase()}
+                                    </span>
+                                </div>
+                            </button>
+                            {showUserMenu && (
+                                <div
+                                    ref={userMenuRef}
+                                    className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-40 p-2 rounded-md shadow-lg bg-popover border-border z-50 flex flex-col gap-1"
+                                >
+                                    <div className="p-2 text-center text-sm text-foreground truncate">
+                                        {userInfo.full_name}
+                                    </div>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="flex items-center gap-2 p-2 w-full text-left rounded-md hover:bg-popover-hover text-destructive"
+                                    >
+                                        <IconLogout size={16} />
+                                        Logout
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <ButtonIcon
+                            icon={IconUser}
+                            title="Authenticate"
+                            size={24}
+                            onClick={() => setShowAuthModal(true)}
+                        />
+                    )}
+                    <ThemeToggle />
+                </nav>
+
+                {/* Desktop User Info */}
+                <div className="hidden md:flex flex-col items-center mt-auto mb-2 relative">
                     {userInfo ? (
                         <div className="flex flex-col items-center gap-2">
                             <button
@@ -139,7 +192,7 @@ export default function Sidebar() {
                             {showUserMenu && (
                                 <div
                                     ref={userMenuRef}
-                                    className="absolute ml-8 bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-40 p-2 rounded-md shadow-lg bg-popover border border-popover-border z-50 flex flex-col gap-1"
+                                    className="absolute ml-8 bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-40 p-2 rounded-md shadow-lg bg-popover border-border z-50 flex flex-col gap-1"
                                 >
                                     <button
                                         onClick={handleLogout}

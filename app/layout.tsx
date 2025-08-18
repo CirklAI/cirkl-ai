@@ -28,10 +28,10 @@ export default function RootLayout({
     <ThemeProvider>
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col md:flex-row`}
         >
           <Sidebar />
-          <div className="ml-26">
+          <div className="flex-1">
             {children}
           </div>
         </body>
