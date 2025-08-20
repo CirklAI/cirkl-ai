@@ -1,9 +1,15 @@
-import { MacbookScroll } from "@/components/ui/macbook";
+import { Hero } from '@/components/hero';
+import { Features } from '@/components/features';
+import { Pricing } from '@/components/pricing';
 
 export default function Home() {
     return (
-        <div className="bg-background text-foreground h-screen">
-            <MacbookScroll src="/ui.png" showGradient={true} title="Introducing Celestial" badge={false} />
+        <div className="bg-background text-foreground">
+            <main>
+                <Hero />
+                <Features />
+                <Pricing />
+            </main>
         </div>
     );
 }

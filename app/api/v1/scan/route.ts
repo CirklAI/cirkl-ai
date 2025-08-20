@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
         return new Response("File too small", {status: 400});
     }
 
-    const MAX_FILE_SIZE_BYTES = 1 * 1024 * 1024 * 1024;
+    const MAX_FILE_SIZE_BYTES = 500 * 1024 * 1024 * 1024;
     if(fileBytes.byteLength > MAX_FILE_SIZE_BYTES) {
         return new Response(`Request too large: Max size is ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB`, {status: 413});
     }

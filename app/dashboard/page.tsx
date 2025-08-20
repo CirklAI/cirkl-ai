@@ -195,7 +195,7 @@ function SecurityAnalysis({ result }: { result: ScanResult }) {
                         {result.entropy !== 0.0 ? (
                             <>
                                 <div className="flex justify-between items-center mb-2 mt-2">
-                                    <span className="text-neutral-300">Obfuscation (Entropy) Score</span>
+                                    <span className="text-neutral-300">Randomness Score</span>
                                     <Badge className={`${entropyLevel === 'high'
                                         ? 'bg-red-500/20 text-red-400 border-red-500/30'
                                         : entropyLevel === 'medium'
@@ -234,6 +234,17 @@ function SecurityAnalysis({ result }: { result: ScanResult }) {
 }
 
 function SuspiciousStrings({ result }: { result: ScanResult }) {
+    const suspicions = result.suspicions.map(s => {
+        if (typeof s === 'string') {
+            try {
+                return JSON.parse(s);
+            } catch (e) {
+                return { pattern: s, weight: 0, match_text: null };
+            }
+        }
+        return s;
+    });
+
     return (
         <Card className="bg-card border-border">
             <CardContent className="p-6">
@@ -247,22 +258,29 @@ function SuspiciousStrings({ result }: { result: ScanResult }) {
                     </div>
                 </div>
 
-                {result.suspicions.length > 0 ? (
+                {suspicions.length > 0 ? (
                     <div className="space-y-2">
                         <div className="flex items-center gap-2 mb-3">
                             <AlertTriangle className="w-4 h-4 text-orange-400" />
                             <span className="text-orange-400 text-sm font-medium">
-                                Found {result.suspicions.length} suspicious actions
+                                Found {suspicions.length} suspicious actions
                             </span>
                         </div>
 
                         <div className="bg-secondary/50 rounded-lg p-3 max-h-64 overflow-y-auto">
-                            {result.suspicions.map((str, i) => (
-                                <div key={i} className="mb-3 last:mb-0">
-                                    <code
-                                        className="text-orange-300 bg-card px-3 py-2 rounded text-sm font-mono break-all">
-                                        {JSON.stringify(str)}
-                                    </code>
+                            {suspicions.map((suspicion, i) => (
+                                <div key={i} className="bg-card p-3 rounded-lg mb-3 last:mb-0">
+                                    <div className="flex justify-between items-start">
+                                        <span className="font-semibold text-orange-300">{suspicion.pattern}</span>
+                                        <Badge className="bg-red-500/20 text-red-300 border-red-500/30">
+                                            Weight: {suspicion.weight}
+                                        </Badge>
+                                    </div>
+                                    {suspicion.match_text && (
+                                        <p className="text-muted-foreground text-sm mt-1">
+                                            Match: <code className="font-mono">{suspicion.match_text}</code>
+                                        </p>
+                                    )}
                                 </div>
                             ))}
                         </div>
