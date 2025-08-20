@@ -16,10 +16,18 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 
+type Suspicion = {
+    pattern: string;
+    match_text: string | null;
+    weight: number;
+    malware_type: string;
+    signature: string;
+};
+
 type ScanResult = {
     is_executable: boolean;
     ngram_score: number;
-    suspicions: string[];
+    suspicions: (string | Suspicion)[];
     sha256_hash: string | null;
     malware_type: string;
     verdict: string;
@@ -235,11 +243,14 @@ function SecurityAnalysis({ result }: { result: ScanResult }) {
 
 function SuspiciousStrings({ result }: { result: ScanResult }) {
     const suspicions = result.suspicions.map(s => {
-        try {
-            return JSON.parse(s);
-        } catch {
-            return {pattern: s, weight: 0, match_text: null};
+        if (typeof s === 'string') {
+            try {
+                return JSON.parse(s);
+            } catch {
+                return { pattern: s, weight: 0, match_text: null };
+            }
         }
+        return s;
     });
 
     return (
