@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 export function Pricing() {
     const [isAnnual, setIsAnnual] = useState(false);
@@ -64,7 +63,7 @@ export function Pricing() {
                 >
                     <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground">Flexible Pricing for Everyone</h2>
                     <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-                        Choose the plan that's right for you.
+                        Choose the plan that&apos;s right for you.
                     </p>
                 </motion.div>
 
