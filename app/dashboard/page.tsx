@@ -235,14 +235,11 @@ function SecurityAnalysis({ result }: { result: ScanResult }) {
 
 function SuspiciousStrings({ result }: { result: ScanResult }) {
     const suspicions = result.suspicions.map(s => {
-        if (typeof s === 'string') {
-            try {
-                return JSON.parse(s);
-            } catch (e) {
-                return { pattern: s, weight: 0, match_text: null };
-            }
+        try {
+            return JSON.parse(s);
+        } catch {
+            return {pattern: s, weight: 0, match_text: null};
         }
-        return s;
     });
 
     return (
