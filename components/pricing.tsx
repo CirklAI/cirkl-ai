@@ -21,17 +21,17 @@ export function Pricing() {
             cta: 'Start for Free',
         },
         {
-            name: 'Desktop',
+            name: 'Premium',
             price: {
                 monthly: '$4.99',
                 annual: '$2.49',
             },
             description: 'For power users and professionals.',
             features: [
+                'Everything in Basic',
                 'Full desktop application',
-                'Advanced AI analysis',
-                'In-depth reporting',
                 'Priority email support',
+                'Cloud integration'
             ],
             cta: 'Get Started',
         },
@@ -43,6 +43,7 @@ export function Pricing() {
             },
             description: 'For businesses and organizations.',
             features: [
+                'Everything in Premium',
                 'On-premise deployment',
                 'API access',
                 'Dedicated support',
