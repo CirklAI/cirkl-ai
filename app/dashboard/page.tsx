@@ -242,17 +242,6 @@ function SecurityAnalysis({ result }: { result: ScanResult }) {
 }
 
 function SuspiciousStrings({ result }: { result: ScanResult }) {
-  const suspicions = result.suspicions.map(s => {
-    if (typeof s === 'string') {
-      try {
-        return JSON.parse(s);
-      } catch {
-        return { pattern: s, weight: 0, match_text: null };
-      }
-    }
-    return s;
-  });
-
   return (
     <Card className="bg-card border-border">
       <CardContent className="p-6">
@@ -306,7 +295,6 @@ export default function DashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ScanResult | null>(null);
   const [hasStartedScan, setHasStartedScan] = useState(false);
-
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
