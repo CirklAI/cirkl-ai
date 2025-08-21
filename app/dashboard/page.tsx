@@ -191,7 +191,7 @@ function SecurityAnalysis({ result }: { result: ScanResult }) {
                 {result.ngram_score.toFixed(2)} ({ngramLevel})
               </Badge>
             </div>
-            <div className="w-full bg-card rounded-full h-2">
+            <div className="w-full bg-popover rounded-full h-2">
               <div
                 className={`h-2 rounded-full ${ngramLevel === 'high' ? 'bg-red-500/80' :
                   ngramLevel === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
@@ -203,7 +203,7 @@ function SecurityAnalysis({ result }: { result: ScanResult }) {
             {result.entropy !== 0.0 ? (
               <>
                 <div className="flex justify-between items-center mb-2 mt-2">
-                  <span className="text-neutral-300">Randomness Score</span>
+                  <span className="text-primary">Randomness Score</span>
                   <Badge className={`${entropyLevel === 'high'
                     ? 'bg-red-500/20 text-red-400 border-red-500/30'
                     : entropyLevel === 'medium'
@@ -214,7 +214,7 @@ function SecurityAnalysis({ result }: { result: ScanResult }) {
                   </Badge>
                 </div>
 
-                <div className="w-full bg-neutral-700 rounded-full h-2 mt-2">
+                <div className="w-full bg-popover rounded-full h-2 mt-2">
                   <div
                     className={`h-2 rounded-full ${entropyLevel === 'high' ? 'bg-red-500/80' :
                       entropyLevel === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
@@ -373,7 +373,7 @@ export default function DashboardPage() {
           >
             <div className="p-6 bg-card/20 rounded-full">
               <div
-                className="w-16 h-16 border-4 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
+                className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
             </div>
 
             <div className="text-center space-y-4">
