@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { MotionValue, motion, useScroll, useTransform } from "motion/react";
 import { cn } from "@/lib/utils";
 import {
@@ -29,12 +28,10 @@ export const MacbookScroll = ({
     src,
     showGradient,
     title,
-    badge,
 }: {
     src?: string;
     showGradient?: boolean;
     title?: string | React.ReactNode;
-    badge?: React.ReactNode;
 }) => {
     const ref = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
@@ -77,11 +74,7 @@ export const MacbookScroll = ({
                 }}
                 className="mb-20 text-center text-3xl font-bold text-neutral-800 dark:text-white"
             >
-                {title || (
-                    <span>
-                        This Macbook is built with Tailwindcss. <br /> No kidding.
-                    </span>
-                )}
+                {title}
             </motion.h2>
             <Lid
                 src={src}
@@ -110,7 +103,6 @@ export const MacbookScroll = ({
                 {showGradient && (
                     <div className="absolute inset-x-0 bottom-0 z-50 h-40 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black"></div>
                 )}
-                {badge && <div className="absolute bottom-4 left-4">{badge}</div>}
             </div>
         </div>
     );
@@ -160,11 +152,12 @@ export const Lid = ({
                 className="absolute inset-0 h-96 w-[32rem] rounded-2xl bg-[#010101] p-2"
             >
                 <div className="absolute inset-0 rounded-lg bg-[#272729]" />
-                <Image
+                <img
                     src={src as string}
                     alt="logo"
-                    fill
-                    className="rounded-lg object-cover object-left-top"
+                    width="100%"
+                    height="100%"
+                    className="absolute inset-0 rounded-lg object-fill object-left-top"
                 />
             </motion.div>
         </div>

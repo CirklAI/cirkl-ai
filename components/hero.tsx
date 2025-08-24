@@ -46,13 +46,8 @@ export function Hero() {
             <div className="relative">
                 <MacbookScroll
                     src="/ui.png"
-                    showGradient={true}
+                    showGradient={false}
                     title="Security, at your fingertips."
-                    badge={
-                        <div className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm">
-                            AI Powered
-                        </div>
-                    }
                 />
             </div>
         </div>
