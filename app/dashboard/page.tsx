@@ -5,7 +5,7 @@ import {Card, CardContent} from "@/components/ui/card";
 import {Loader} from "@/components/ui/loader";
 import {Badge} from "@/components/ui/badge";
 import {AlertTriangle, Bug, FileText, RotateCcw, ShieldAlert, ShieldCheck, Upload, Zap} from "lucide-react";
-import {motion} from "motion/react";
+import {motion, stagger} from "motion/react";
 
 type Suspicion = {
     pattern: string;
@@ -463,7 +463,7 @@ export default function DashboardPage() {
                             hidden: {},
                             visible: {
                                 transition: {
-                                    staggerChildren: 0.15
+                                    delayChildren: stagger(0.15)
                                 }
                             }
                         }}
