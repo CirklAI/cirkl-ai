@@ -3,14 +3,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Zap, ShieldCheck, BrainCircuit, Layers } from 'lucide-react';
+import { ShieldCheck, BrainCircuit, Layers } from 'lucide-react';
 
 const features = [
-    {
-        icon: <Zap className="w-8 h-8 text-primary" />,
-        title: 'Real-Time Scanning',
-        description: 'Instantly scan files with our high-speed analysis engine. Neutralize threats in real time faster than ever before.',
-    },
     {
         icon: <ShieldCheck className="w-8 h-8 text-primary" />,
         title: 'Comprehensive Detection',
@@ -43,7 +38,7 @@ export function Features() {
                         Powerful features designed to give you peace of mind.
                     </p>
                 </motion.div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {features.map((feature, index) => (
                         <motion.div
                             key={index}

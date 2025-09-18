@@ -68,7 +68,7 @@ export function Pricing() {
                     </p>
                 </motion.div>
 
-                <div className="flex items-center justify-center space-x-2 bg-muted p-1 rounded-lg max-w-xs mx-auto mb-8">
+                <div className="flex items-center justify-center space-x-2 bg-muted p-1 rounded-3xl max-w-xs mx-auto mb-8">
                     <Button
                         onClick={() => setIsAnnual(false)}
                         variant={!isAnnual ? 'default' : 'ghost'}
