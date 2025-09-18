@@ -1,124 +1,143 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-export function Pricing() {
+export default function Pricing() {
     const [isAnnual, setIsAnnual] = useState(false);
 
     const tiers = [
         {
-            name: 'Basic',
+            name: 'Essential',
             price: {
                 monthly: 'Free',
                 annual: 'Free',
             },
-            description: 'For individuals starting out.',
-            features: ['Web-based file scanning', 'Basic threat analysis', 'Community support'],
-            cta: 'Start for Free',
+            description: 'Perfect for getting started with security.',
+            features: [
+                'Advanced web scanning',
+                'Real-time threat detection',
+                'Zero data retention'
+            ],
+            cta: 'Get Essential',
         },
         {
-            name: 'Premium',
+            name: 'Pro',
             price: {
                 monthly: '$4.99',
                 annual: '$2.49',
             },
-            description: 'For power users and professionals.',
+            description: 'Built for professionals who demand more.',
             features: [
-                'Everything in Basic',
-                'Full desktop application',
-                'Priority email support',
-                'Cloud integration'
+                'Everything in Essential',
+                'Native desktop experience',
+                'Priority support'
             ],
-            cta: 'Get Started',
+            cta: 'Choose Pro',
+            featured: true
         },
         {
-            name: 'Enterprise',
+            name: 'Business',
             price: {
                 monthly: 'Custom',
                 annual: 'Custom',
             },
-            description: 'For businesses and organizations.',
+            description: 'Designed for teams and businesses.',
             features: [
-                'Everything in Premium',
-                'On-premise deployment',
-                'API access',
-                'Dedicated support',
-                'Custom integrations',
+                'Everything in Pro',
+                'Private cloud deployment',
+                'Sub-second¹ scans'
             ],
-            cta: 'Contact Sales',
+            cta: 'Talk to Sales',
         },
     ];
 
     return (
-        <section id="pricing" className="py-20">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="text-center mb-12"
-                >
-                    <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground">Flexible Pricing for Everyone</h2>
-                    <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-                        Choose the plan that&apos;s right for you.
+        <section className="py-32 bg-background">
+            <div className="max-w-6xl mx-auto px-6">
+                <div className="text-center mb-20">
+                    <h2 className="text-6xl font-bold text-foreground tracking-tight mb-6 leading-none">
+                        Ready when you are.
+                    </h2>
+                    <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                        Choose the plan that fits you perfectly.
                     </p>
-                </motion.div>
-
-                <div className="flex items-center justify-center space-x-2 bg-muted p-1 rounded-3xl max-w-xs mx-auto mb-8">
-                    <Button
-                        onClick={() => setIsAnnual(false)}
-                        variant={!isAnnual ? 'default' : 'ghost'}
-                        className="w-full"
-                    >
-                        Monthly
-                    </Button>
-                    <Button
-                        onClick={() => setIsAnnual(true)}
-                        variant={isAnnual ? 'default' : 'ghost'}
-                        className="w-full"
-                    >
-                        Annual (Save 50%)
-                    </Button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {tiers.map((tier, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                <div className="flex justify-center mb-20">
+                    <div className="bg-muted rounded-full p-2">
+                        <button
+                            onClick={() => setIsAnnual(false)}
+                            className={`px-8 py-3 rounded-full text-base font-medium transition-all ${!isAnnual
+                                ? 'bg-primary text-primary-foreground shadow-sm'
+                                : 'text-muted-foreground hover:text-foreground'
+                                }`}
                         >
-                            <Card className="h-full flex flex-col">
-                                <CardHeader>
-                                    <CardTitle>{tier.name}</CardTitle>
-                                    <div className="text-4xl font-bold">
-                                        {isAnnual ? tier.price.annual : tier.price.monthly}
-                                        {tier.name !== 'Basic' && tier.name !== 'Enterprise' && (
-                                            <span className="text-lg font-normal text-muted-foreground">/mo</span>
+                            Monthly
+                        </button>
+                        <button
+                            onClick={() => setIsAnnual(true)}
+                            className={`px-8 py-3 rounded-full text-base font-medium transition-all ${isAnnual
+                                ? 'bg-primary text-primary-foreground shadow-sm'
+                                : 'text-muted-foreground hover:text-foreground'
+                                }`}
+                        >
+                            Yearly
+                        </button>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+                    {tiers.map((tier, index) => (
+                        <div
+                            key={index}
+                            className={`bg-card rounded-3xl border transition-all duration-300 hover:shadow-lg h-full flex flex-col ${tier.featured
+                                ? 'border-accent shadow-lg transform lg:scale-105'
+                                : 'border-border hover:border-primary/50'
+                                }`}
+                        >
+                            <div className="p-10 flex flex-col flex-grow">
+                                <div className="text-center mb-10">
+                                    <h3 className="text-3xl font-bold text-card-foreground mb-4">
+                                        {tier.name}
+                                    </h3>
+                                    <div className="mb-4">
+                                        <span className="text-6xl font-bold text-card-foreground tracking-tight">
+                                            {isAnnual ? tier.price.annual : tier.price.monthly}
+                                        </span>
+                                        {tier.name !== 'Essential' && tier.name !== 'Max' && (
+                                            <span className="text-xl text-muted-foreground font-medium">
+                                                /month
+                                            </span>
                                         )}
                                     </div>
-                                    <CardDescription>{tier.description}</CardDescription>
-                                </CardHeader>
-                                <CardContent className="flex-grow">
-                                    <ul className="space-y-4">
-                                        {tier.features.map((feature, i) => (
-                                            <li key={i} className="flex items-center gap-3">
-                                                <Check className="w-5 h-5 text-primary" />
-                                                <span className="text-muted-foreground">{feature}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </CardContent>
-                                <div className="p-6">
-                                    <Button className="w-full">{tier.cta}</Button>
+                                    <p className="text-muted-foreground text-lg leading-relaxed">
+                                        {tier.description}
+                                    </p>
                                 </div>
-                            </Card>
-                        </motion.div>
+
+                                <div className="space-y-6 mb-12 flex-grow">
+                                    {tier.features.map((feature, i) => (
+                                        <div key={i} className="flex items-start">
+                                            <Check className="w-6 h-6 text-primary mt-1 mr-4 flex-shrink-0" />
+                                            <span className="text-card-foreground text-lg leading-relaxed">
+                                                {feature}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <Button
+                                    className={`w-full py-8 px-16 rounded-2xl text-lg font-semibold transition-all ${tier.featured
+                                        ? 'shadow-sm'
+                                        : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                                        }`}
+                                >
+                                    {tier.cta}
+                                </Button>
+                            </div>
+                        </div>
                     ))}
                 </div>
             </div>

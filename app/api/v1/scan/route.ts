@@ -2,27 +2,31 @@ import { NextRequest } from 'next/server';
 
 export async function POST(request: NextRequest) {
     const fileBytes = await request.arrayBuffer();
-
     const authHeader = request.headers.get('Authorization');
     let token = '';
 
     if (authHeader && authHeader.startsWith('Bearer ')) {
         token = authHeader.substring(7);
     } else {
-        return new Response("Unauthorized: No valid token provided", { status: 401 });
+        return new Response(JSON.stringify({ error: "Unauthorized: No valid token provided" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" }
+        });
     }
 
-    if(!fileBytes) {
-        return new Response("No file provided", {status: 400});
+    if (!fileBytes || fileBytes.byteLength < 1) {
+        return new Response(JSON.stringify({ error: "No valid file provided" }), {
+            status: 400,
+            headers: { "Content-Type": "application/json" }
+        });
     }
 
-    if(fileBytes.byteLength < 1) {
-        return new Response("File too small", {status: 400});
-    }
-
-    const MAX_FILE_SIZE_BYTES = 500 * 1024 * 1024 * 1024;
-    if(fileBytes.byteLength > MAX_FILE_SIZE_BYTES) {
-        return new Response(`Request too large: Max size is ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB`, {status: 413});
+    const MAX_FILE_SIZE_BYTES = 500 * 1024 * 1024;
+    if (fileBytes.byteLength > MAX_FILE_SIZE_BYTES) {
+        return new Response(JSON.stringify({ error: `Request too large: Max size is ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB` }), {
+            status: 413,
+            headers: { "Content-Type": "application/json" }
+        });
     }
 
     try {
@@ -37,27 +41,28 @@ export async function POST(request: NextRequest) {
 
         const rawText = await response.text();
 
-        let scanJsonParsed;
         try {
-            scanJsonParsed = JSON.parse(rawText);
+            JSON.parse(rawText);
         } catch {
-            return new Response("External service returned invalid JSON", { status: 502 });
+            console.error("External API returned non-JSON response:", rawText);
+            return new Response(rawText, { status: response.status });
         }
 
-        const scanResult = JSON.stringify(scanJsonParsed);
-
-        return new Response(scanResult, {
-            status: 200,
-            headers: {"Content-Type": "application/json"},
+        return new Response(rawText, {
+            status: response.status,
+            headers: { "Content-Type": "application/json" },
         });
-    } catch(error) {
-        if(error instanceof Error) {
-            console.error('ERROR during scan request:', error.message);
-            console.error('STACK:', error.stack);
+
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error('ERROR during scan proxy request:', error.message);
         } else {
-            console.error("Unknown scan error:", error);
+            console.error("Unknown scan proxy error:", error);
         }
 
-        return new Response("Internal server error, application could not recover", {status: 500});
+        return new Response(JSON.stringify({ error: "Internal server error during scan proxy" }), {
+            status: 500,
+            headers: { "Content-Type": "application/json" }
+        });
     }
 }

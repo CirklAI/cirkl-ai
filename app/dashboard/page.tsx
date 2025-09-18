@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { AlertTriangle, Bug, FileText, RotateCcw, ShieldAlert, ShieldCheck, Upload, Zap } from "lucide-react";
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 
 type Suspicion = {
     pattern: string;
@@ -34,7 +34,7 @@ function ThreatOverview({ result }: { result: ScanResult }) {
             <div className="p-6">
                 <div className="flex items-center gap-4 mb-4">
                     <div className={`p-3 rounded-full ${isClean ? 'bg-green-500/20' : 'bg-red-500/20'}`}>
-                        {isClean ? <ShieldCheck className="w-8 h-8 text-green-400"/> : <ShieldAlert className="w-8 h-8 text-red-400"/>}
+                        {isClean ? <ShieldCheck className="w-8 h-8 text-green-400" /> : <ShieldAlert className="w-8 h-8 text-red-400" />}
                     </div>
                     <div>
                         <h3 className="text-xl font-semibold text-white">Threat Assessment</h3>
@@ -73,7 +73,7 @@ function FileProperties({ result }: { result: ScanResult }) {
             <div className="p-6">
                 <div className="flex items-center gap-3 mb-4">
                     <div className="p-2 bg-neutral-700/40 rounded-lg">
-                        <FileText className="w-6 h-6 text-white"/>
+                        <FileText className="w-6 h-6 text-white" />
                     </div>
                     <div>
                         <h3 className="text-lg font-semibold text-white">File Properties</h3>
@@ -134,7 +134,7 @@ function SecurityAnalysis({ result }: { result: ScanResult }) {
             <div className="p-6">
                 <div className="flex items-center gap-3 mb-4">
                     <div className="p-2 bg-purple-500/20 rounded-lg">
-                        <Zap className="w-6 h-6 text-purple-400"/>
+                        <Zap className="w-6 h-6 text-purple-400" />
                     </div>
                     <div>
                         <h3 className="text-lg font-semibold text-white">Security Analysis</h3>
@@ -196,7 +196,7 @@ function SuspiciousStrings({ result }: { result: ScanResult }) {
             <div className="p-6">
                 <div className="flex items-center gap-3 mb-4">
                     <div className="p-2 bg-orange-500/20 rounded-lg">
-                        <Bug className="w-6 h-6 text-orange-400"/>
+                        <Bug className="w-6 h-6 text-orange-400" />
                     </div>
                     <div>
                         <h3 className="text-lg font-semibold text-white">Suspicions</h3>
@@ -207,7 +207,7 @@ function SuspiciousStrings({ result }: { result: ScanResult }) {
                 {suspicions.length > 0 ? (
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
-                            <AlertTriangle className="w-4 h-4 text-orange-400"/>
+                            <AlertTriangle className="w-4 h-4 text-orange-400" />
                             <span className="text-orange-400 text-sm font-medium">
                                 Found {suspicions.length} suspicious item{suspicions.length > 1 ? 's' : ''}
                             </span>
@@ -232,7 +232,7 @@ function SuspiciousStrings({ result }: { result: ScanResult }) {
                     </div>
                 ) : (
                     <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-6 text-center">
-                        <ShieldCheck className="w-8 h-8 text-green-400 mx-auto mb-2"/>
+                        <ShieldCheck className="w-8 h-8 text-green-400 mx-auto mb-2" />
                         <p className="text-green-400 font-medium">No Suspicious Items Found</p>
                         <p className="text-neutral-400 text-sm">The file appears to be clean.</p>
                     </div>
@@ -274,14 +274,28 @@ export default function DashboardPage() {
                     "Authorization": `Bearer ${token}`
                 },
             });
-            const data = await response.json();
-            if (!response.ok) {
-                setError(data.error || "Failed to scan file");
-            } else {
-                setResult({ ...data, filename: data.filename || file.name });
+
+            const responseText = await response.text();
+
+            try {
+                const data = JSON.parse(responseText);
+                if (!response.ok) {
+                    setError(data.error || responseText || "An unknown error occurred");
+                } else {
+                    setResult({ ...data, filename: data.filename || file.name });
+                }
+            } catch {
+                console.error("Client failed to parse JSON response:", responseText);
+
+                if (responseText.includes("Error code 524") && responseText.includes("A timeout occurred")) {
+                    setError("The analysis service timed out. This can happen on a poor internet connection or when Celestial is under heavy load. Please try again in a few minutes.");
+                } else {
+                    console.error(responseText);
+                    setError(`An unexpected server response was received`);
+                }
             }
         } catch (err) {
-            setError(err instanceof Error ? err.message : "An unknown error occurred");
+            setError(err instanceof Error ? err.message : "A network error occurred");
         } finally {
             setLoading(false);
         }
@@ -313,9 +327,9 @@ export default function DashboardPage() {
 
                 {error && !loading && (
                     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="max-w-md mx-auto">
-                        <div className="bg-red-900/50 border border-red-700 rounded-2xl p-6">
+                        <div className="bg-red-900/50 border mt-4 border-red-700 rounded-2xl p-6">
                             <div className="flex items-center gap-3">
-                                <AlertTriangle className="w-6 h-6 text-red-400"/>
+                                <AlertTriangle className="w-6 h-6 text-red-400" />
                                 <div>
                                     <h3 className="text-lg font-semibold text-red-400">Scan Error</h3>
                                     <p className="text-red-300">{error}</p>
@@ -328,7 +342,7 @@ export default function DashboardPage() {
                 {!loading && !hasStartedScan && (
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center justify-center min-h-[80vh] text-center">
                         <div className="p-4 bg-transparent rounded-full mb-4">
-                            <Upload className="w-12 h-12 text-accent"/>
+                            <Upload className="w-12 h-12 text-accent" />
                         </div>
                         <h2 className="text-2xl font-bold text-white mb-2">Upload File for Analysis</h2>
                         <p className="text-neutral-400 mb-6 max-w-md">Select a file to scan for potential threats. Maximum file size is 500MB.</p>
@@ -361,22 +375,22 @@ export default function DashboardPage() {
                             <h2 className="text-3xl font-bold text-white mt-6 mb-2">Scan Results</h2>
                             <p className="text-neutral-400">Comprehensive security analysis complete.</p>
                             <Button onClick={resetScan} variant="secondary" className="mt-4 text-blue-400">
-                                <RotateCcw className="w-4 h-4 mr-2"/>
+                                <RotateCcw className="w-4 h-4 mr-2" />
                                 Scan Another File
                             </Button>
                         </motion.div>
 
                         <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
-                            <ThreatOverview result={result}/>
+                            <ThreatOverview result={result} />
                         </motion.div>
 
                         <motion.div className="grid md:grid-cols-2 gap-6" variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
-                            <FileProperties result={result}/>
-                            <SecurityAnalysis result={result}/>
+                            <FileProperties result={result} />
+                            <SecurityAnalysis result={result} />
                         </motion.div>
 
                         <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
-                            <SuspiciousStrings result={result}/>
+                            <SuspiciousStrings result={result} />
                         </motion.div>
                     </motion.div>
                 )}
