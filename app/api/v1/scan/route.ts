@@ -41,8 +41,6 @@ export async function POST(request: NextRequest) {
 
         const rawText = await response.text();
 
-        console.log(rawText);
-
         try {
             JSON.parse(rawText);
         } catch {
