@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fa0452ef-f11e-4fc4-9c4c-be0b0253f81a" name="Changes" comment="new buttons">
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/.server-controller-port.log" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,6 +148,7 @@
       <workItem from="1756419701549" duration="301000" />
       <workItem from="1758155349589" duration="5464000" />
       <workItem from="1758161502260" duration="226000" />
+      <workItem from="1758424088072" duration="144000" />
     </task>
     <task id="LOCAL-00001" summary="update wording">
       <option name="closed" value="true" />
