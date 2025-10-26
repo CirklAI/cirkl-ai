@@ -9,7 +9,7 @@ import MagicText from "@/components/ui/magic-text";
 
 export default function Hero() {
     return (
-        <div className="relative w-full bg-background overflow-hidden">
+        <div className="relative w-full overflow-hidden">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center pt-32 pb-16">
                     <motion.h1

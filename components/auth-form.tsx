@@ -13,11 +13,11 @@ interface UserInfo {
 interface AuthFormProps {
     mode?: AuthMode;
     onModeChange?: (mode: AuthMode) => void;
-    onSubmit?: (email: string, password: string, confirmPassword?: string, name?: string) => void;
+    onSuccess?: () => void;
     onClose?: () => void;
 }
 
-function AuthForm({ mode = "login", onModeChange, onSubmit, onClose }: AuthFormProps) {
+function AuthForm({ mode = "login", onModeChange, onSuccess, onClose }: AuthFormProps) {
     const [currentMode, setCurrentMode] = useState<AuthMode>(mode);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -69,9 +69,38 @@ function AuthForm({ mode = "login", onModeChange, onSubmit, onClose }: AuthFormP
         setIsLoading(true);
 
         try {
-            onSubmit?.(email, password, confirmPassword, name);
+            const isLogin = currentMode === "login";
+            const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register";
+            const payload = isLogin
+                ? { email, password }
+                : { email, password, full_name: name };
+
+            const response = await fetch(endpoint, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                console.error("Auth error:", errorData);
+                alert(`${isLogin ? "Login" : "Registration"} failed. Please try again.`);
+                return;
+            }
+
+            const data = await response.json();
+            localStorage.setItem("auth_token", data.token);
+            localStorage.setItem("user_info", JSON.stringify(data.user));
+            
+            onSuccess?.();
+
         } catch (error) {
             console.error("Auth error:", error);
+            alert(
+                error instanceof Error
+                    ? error.message
+                    : "Authentication failed. Please try again."
+            );
         } finally {
             setIsLoading(false);
         }

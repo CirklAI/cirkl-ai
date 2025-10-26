@@ -22,8 +22,8 @@ export default function Footer() {
             }
         };
 
-        checkStatus();
-        const interval = setInterval(checkStatus, 30000); // Check every 30 seconds
+        checkStatus().then();
+        const interval = setInterval(checkStatus, 30000);
 
         return () => clearInterval(interval);
     }, []);
@@ -53,7 +53,7 @@ export default function Footer() {
 
                 <div className="mt-12 pt-8 border-t border-border">
                     <div className="text-sm text-muted-foreground">
-                        <p><sup>1</sup> Tested with ~20mb files</p>
+                        <p><sup>1</sup> Tested with 2mb files</p>
                     </div>
                 </div>
             </div>

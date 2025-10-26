@@ -47,7 +47,7 @@ export default function Pricing() {
             features: [
                 'Everything in Pro',
                 'Private cloud deployment',
-                'Sub-second¹ scans'
+                'Scan in a blink¹'
             ],
             cta: 'Talk to Sales',
         },

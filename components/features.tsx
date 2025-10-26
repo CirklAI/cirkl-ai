@@ -38,7 +38,7 @@ const features = [
 export default function Features() {
     return (
         <div className="w-full">
-            <section className="border-t border-zinc-200 dark:border-zinc-800 bg-gray-50/50 dark:bg-black">
+            <section className="border-t border-zinc-200 dark:border-zinc-800">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-28 sm:py-32 text-center">
                     <h2 className="text-5xl sm:text-6xl font-extrabold text-foreground tracking-tight">
                         Advanced. Inside out.
@@ -52,7 +52,7 @@ export default function Features() {
             {features.map((feature, index) => (
                 <section
                     key={index}
-                    className="relative border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black"
+                    className="relative border-t"
                 >
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-28 sm:py-32">
                         <div className="max-w-3xl mx-auto text-center">

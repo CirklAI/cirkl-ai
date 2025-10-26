@@ -1,9 +1,19 @@
-'use client';
+"use client";
 
+import {motion, Variants} from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
-import { motion } from "motion/react";
-import { AlertTriangle, Bug, FileText, RotateCcw, ShieldAlert, ShieldCheck, Upload, Zap } from "lucide-react";
+import {
+    AlertTriangle,
+    Bug,
+    FileText,
+    RotateCcw,
+    ShieldAlert,
+    ShieldCheck,
+    Upload,
+    Zap,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useSidebar } from "@/lib/hooks/useSidebar";
 
 type Suspicion = {
     pattern: string;
@@ -30,36 +40,36 @@ function ThreatOverview({ result }: { result: ScanResult }) {
     const isClean = result.verdict.toLowerCase() === 'clean';
 
     return (
-        <div className="bg-neutral-800/50 border border-neutral-700 rounded-2xl">
+        <div className="bg-card/50 border border-border rounded-2xl">
             <div className="p-6">
                 <div className="flex items-center gap-4 mb-4">
-                    <div className={`p-3 rounded-full ${isClean ? 'bg-green-500/20' : 'bg-red-500/20'}`}>
-                        {isClean ? <ShieldCheck className="w-8 h-8 text-green-400" /> : <ShieldAlert className="w-8 h-8 text-red-400" />}
+                    <div className={`p-3 rounded-full ${isClean ? 'bg-primary/20' : 'bg-destructive/20'}`}>
+                        {isClean ? <ShieldCheck className="w-8 h-8 text-primary" /> : <ShieldAlert className="w-8 h-8 text-destructive" />}
                     </div>
                     <div>
                         <h3 className="text-xl font-semibold text-white">Threat Assessment</h3>
-                        <p className="text-neutral-400">Security scan results</p>
+                        <p className="text-muted-foreground">Security scan results</p>
                     </div>
                 </div>
 
                 <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                        <span className="text-neutral-400">Status</span>
-                        <div className={`px-3 py-1 rounded-full text-sm font-medium ${isClean ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                        <span className="text-muted-foreground">Status</span>
+                        <div className={`px-3 py-1 rounded-full text-sm font-medium ${isClean ? 'bg-primary/20 text-primary' : 'bg-destructive/20 text-destructive'}`}>
                             {result.verdict}
                         </div>
                     </div>
 
                     {result.detection_reason && (
                         <div className="flex justify-between items-start gap-4">
-                            <span className="text-neutral-300">Detection Reason</span>
-                            <span className="text-violet-400 text-right text-sm max-w-sm">{result.detection_reason}</span>
+                            <span className="text-muted-foreground">Detection Reason</span>
+                            <span className="text-accent text-right text-sm max-w-sm">{result.detection_reason}</span>
                         </div>
                     )}
 
                     <div className="flex justify-between items-center">
-                        <span className="text-neutral-300">File Name</span>
-                        <span className="text-neutral-300 font-mono text-sm">{result.filename || "Unknown"}</span>
+                        <span className="text-muted-foreground">File Name</span>
+                        <span className="text-foreground font-mono text-sm">{result.filename || "Unknown"}</span>
                     </div>
                 </div>
             </div>
@@ -69,10 +79,10 @@ function ThreatOverview({ result }: { result: ScanResult }) {
 
 function FileProperties({ result }: { result: ScanResult }) {
     return (
-        <div className="bg-neutral-800/50 border border-neutral-700 rounded-2xl">
+        <div className="bg-card/50 border border-border rounded-2xl">
             <div className="p-6">
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-neutral-700/40 rounded-lg">
+                    <div className="p-2 bg-popover rounded-lg">
                         <FileText className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -82,7 +92,7 @@ function FileProperties({ result }: { result: ScanResult }) {
                 </div>
 
                 <div className="space-y-4">
-                    <div className="bg-neutral-900/60 rounded-lg p-3">
+                    <div className="bg-popover rounded-lg p-3">
                         <div className="text-neutral-400 text-xs uppercase tracking-wide mb-1">Executable</div>
                         <div className="text-white font-medium">{result.is_executable ? "Yes" : "No"}</div>
                         {!result.is_executable && (
@@ -91,9 +101,9 @@ function FileProperties({ result }: { result: ScanResult }) {
                             </p>
                         )}
                     </div>
-                    <div className="bg-neutral-900/60 rounded-lg p-3">
+                    <div className="bg-popover rounded-lg p-3">
                         <div className="text-neutral-400 text-xs uppercase tracking-wide mb-2">SHA256 Hash</div>
-                        <div className="text-neutral-300 font-mono text-sm break-all bg-neutral-800 p-3 rounded">
+                        <div className="text-neutral-300 font-mono text-sm break-all bg-card p-3 rounded">
                             {result.sha256_hash || "Not available"}
                         </div>
                     </div>
@@ -105,23 +115,34 @@ function FileProperties({ result }: { result: ScanResult }) {
 
 const getMalwareColorClass = (malwareType: string) => {
     const colorMap: { [key: string]: string } = {
-        "Clean": 'bg-green-500/20 text-green-400',
-        "UnknownVirusMalicious": 'bg-red-500/20 text-red-400',
-        "Ransomware": 'bg-yellow-500/20 text-yellow-400',
-        "CredentialStealerGeneric": 'bg-purple-500/20 text-purple-400',
-        "TokenStealerGeneric": 'bg-pink-500/20 text-pink-400',
-        "ForkBombGeneric": 'bg-orange-500/20 text-orange-400',
-        "RegeditGeneric": 'bg-blue-500/20 text-blue-400',
-        "TrojanGeneric": 'bg-red-600/20 text-red-400',
+        "Clean": 'bg-primary/20 text-primary',
+        "UnknownVirusMalicious": 'bg-destructive/20 text-destructive',
+        "Ransomware": 'bg-accent/20 text-accent',
+        "CredentialStealerGeneric": 'bg-accent/20 text-accent',
+        "TokenStealerGeneric": 'bg-accent/20 text-accent',
+        "ForkBombGeneric": 'bg-destructive/20 text-destructive',
+        "RegeditGeneric": 'bg-secondary/20 text-secondary-foreground',
+        "TrojanGeneric": 'bg-destructive/20 text-destructive',
     };
-    return colorMap[malwareType] || 'bg-neutral-700/40 text-neutral-300';
+    return colorMap[malwareType] || 'bg-muted/20 text-muted-foreground';
 };
 
 function SecurityAnalysis({ result }: { result: ScanResult }) {
+    const ngramWidth = Math.min((result.ngram_score / 0.02) * 100, 100);
+    const entropyWidth = Math.min((result.entropy / 8.0) * 100, 100);
+
     const getLevelClass = (score: number, thresholds: { high: number; medium: number }) => {
-        if (score >= thresholds.high) return { level: 'high', color: 'bg-red-500/20 text-red-400', barColor: 'bg-red-500' };
-        if (score >= thresholds.medium) return { level: 'medium', color: 'bg-yellow-500/20 text-yellow-400', barColor: 'bg-yellow-500' };
-        return { level: 'low', color: 'bg-green-500/20 text-green-400', barColor: 'bg-green-500' };
+        if (score >= thresholds.high) return {
+            level: 'high',
+            color: 'bg-destructive/20 text-destructive',
+            barColor: 'bg-destructive'
+        };
+        if (score >= thresholds.medium) return {
+            level: 'medium',
+            color: 'bg-accent/20 text-accent',
+            barColor: 'bg-accent'
+        };
+        return { level: 'low', color: 'bg-primary/20 text-primary', barColor: 'bg-primary' };
     };
 
     const ngram = getLevelClass(result.ngram_score, { high: 0.02, medium: 0.005 });
@@ -130,48 +151,51 @@ function SecurityAnalysis({ result }: { result: ScanResult }) {
     const displayClassification = malwareClassification.includes("null") || malwareClassification.includes("Failed") ? 'Unable to classify' : malwareClassification;
 
     return (
-        <div className="bg-neutral-800/50 border border-neutral-700 rounded-2xl">
+        <div className="bg-card/50 border border-border rounded-2xl">
             <div className="p-6">
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-purple-500/20 rounded-lg">
-                        <Zap className="w-6 h-6 text-purple-400" />
+                    <div className="p-2 bg-popover rounded-lg">
+                        <Zap className="w-6 h-6 text-accent" />
                     </div>
                     <div>
                         <h3 className="text-lg font-semibold text-white">Security Analysis</h3>
-                        <p className="text-neutral-400 text-sm">Advanced threat detection metrics</p>
+                        <p className="text-muted-foreground text-sm">Advanced threat detection metrics</p>
                     </div>
                 </div>
 
                 <div className="space-y-4">
-                    <div className="bg-neutral-900/60 rounded-lg p-4">
+                    <div className="bg-popover rounded-lg p-4">
                         <div className="flex justify-between items-center mb-2">
-                            <span className="text-neutral-400">N-Gram Score</span>
+                            <span className="text-muted-foreground">N-Gram Score</span>
                             <div className={`px-2 py-0.5 rounded-full text-xs font-medium ${ngram.color}`}>
                                 {result.ngram_score.toFixed(2)} ({ngram.level})
                             </div>
                         </div>
-                        <div className="w-full bg-neutral-700 rounded-full h-1.5">
-                            <div className={`h-1.5 rounded-full ${ngram.barColor}`} style={{ width: `${Math.min((result.ngram_score / 0.02) * 100, 100)}%` }}></div>
+                        <div className="w-full bg-muted rounded-full h-1.5">
+                            <div className={`h-1.5 rounded-full ${ngram.barColor}`}
+                                 style={{ width: `${ngramWidth}%` }}></div>
                         </div>
 
                         {result.entropy !== 0.0 && (
                             <>
                                 <div className="flex justify-between items-center mb-2 mt-4">
-                                    <span className="text-neutral-400">Randomness Score</span>
+                                    <span className="text-muted-foreground">Randomness Score</span>
                                     <div className={`px-2 py-0.5 rounded-full text-xs font-medium ${entropy.color}`}>
                                         {result.entropy.toFixed(2)} ({entropy.level})
                                     </div>
                                 </div>
-                                <div className="w-full bg-neutral-700 rounded-full h-1.5">
-                                    <div className={`h-1.5 rounded-full ${entropy.barColor}`} style={{ width: `${Math.min((result.entropy / 8.0) * 100, 100)}%` }}></div>
+                                <div className="w-full bg-muted rounded-full h-1.5">
+                                    <div className={`h-1.5 rounded-full ${entropy.barColor}`}
+                                         style={{ width: `${entropyWidth}%` }}></div>
                                 </div>
                             </>
                         )}
                     </div>
-                    <div className="bg-neutral-900/60 rounded-lg p-4">
+                    <div className="bg-popover rounded-lg p-4">
                         <div className="flex justify-between items-center">
-                            <span className="text-neutral-300">Malware Classification</span>
-                            <div className={`px-3 py-1 rounded-full text-sm font-medium ${getMalwareColorClass(result.malware_type)}`}>
+                            <span className="text-muted-foreground">Malware Classification</span>
+                            <div
+                                className={`px-3 py-1 rounded-full text-sm font-medium ${getMalwareColorClass(result.malware_type)}`}>
                                 {displayClassification}
                             </div>
                         </div>
@@ -192,38 +216,38 @@ function SuspiciousStrings({ result }: { result: ScanResult }) {
     });
 
     return (
-        <div className="bg-neutral-800/50 border border-neutral-700 rounded-2xl">
+        <div className="bg-card/50 border border-border rounded-2xl">
             <div className="p-6">
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-orange-500/20 rounded-lg">
-                        <Bug className="w-6 h-6 text-orange-400" />
+                    <div className="p-2 bg-destructive/20 rounded-lg">
+                        <Bug className="w-6 h-6 text-destructive" />
                     </div>
                     <div>
                         <h3 className="text-lg font-semibold text-white">Suspicions</h3>
-                        <p className="text-neutral-400 text-sm">Potential indicators of compromise</p>
+                        <p className="text-muted-foreground text-sm">Potential indicators of compromise</p>
                     </div>
                 </div>
 
                 {suspicions.length > 0 ? (
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
-                            <AlertTriangle className="w-4 h-4 text-orange-400" />
-                            <span className="text-orange-400 text-sm font-medium">
+                            <AlertTriangle className="w-4 h-4 text-destructive" />
+                            <span className="text-destructive text-sm font-medium">
                                 Found {suspicions.length} suspicious item{suspicions.length > 1 ? 's' : ''}
                             </span>
                         </div>
-                        <div className="bg-neutral-900/60 rounded-lg p-3 max-h-64 overflow-y-auto space-y-3">
+                        <div className="bg-popover rounded-lg p-3 max-h-64 overflow-y-auto space-y-3">
                             {suspicions.map((suspicion, i) => (
-                                <div key={i} className="bg-neutral-800 p-3 rounded-lg">
+                                <div key={i} className="bg-card p-3 rounded-lg">
                                     <div className="flex justify-between items-start">
-                                        <span className="font-semibold text-orange-300">{suspicion.pattern}</span>
-                                        <div className="bg-red-500/20 text-red-300 text-xs px-2 py-0.5 rounded-full">
+                                        <span className="font-semibold text-destructive">{suspicion.pattern}</span>
+                                        <div className="bg-destructive/20 text-destructive text-xs px-2 py-0.5 rounded-full">
                                             Weight: {suspicion.weight}
                                         </div>
                                     </div>
                                     {suspicion.match_text && (
-                                        <p className="text-neutral-400 text-sm mt-1">
-                                            Match: <code className="font-mono bg-neutral-700 p-1 rounded">{suspicion.match_text}</code>
+                                        <p className="text-muted-foreground text-sm mt-1">
+                                            Match: <code className="font-mono bg-muted p-1 rounded">{suspicion.match_text}</code>
                                         </p>
                                     )}
                                 </div>
@@ -231,10 +255,10 @@ function SuspiciousStrings({ result }: { result: ScanResult }) {
                         </div>
                     </div>
                 ) : (
-                    <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-6 text-center">
-                        <ShieldCheck className="w-8 h-8 text-green-400 mx-auto mb-2" />
-                        <p className="text-green-400 font-medium">No Suspicious Items Found</p>
-                        <p className="text-neutral-400 text-sm">The file appears to be clean.</p>
+                    <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 text-center">
+                        <ShieldCheck className="w-8 h-8 text-primary mx-auto mb-2" />
+                        <p className="text-primary font-medium">No Suspicious Items Found</p>
+                        <p className="text-muted-foreground text-sm">The file appears to be clean.</p>
                     </div>
                 )}
             </div>
@@ -243,6 +267,7 @@ function SuspiciousStrings({ result }: { result: ScanResult }) {
 }
 
 export default function DashboardPage() {
+    const { setShowingResults } = useSidebar();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
@@ -251,9 +276,33 @@ export default function DashboardPage() {
     const [hasStartedScan, setHasStartedScan] = useState(false);
     const [token, setToken] = useState<string | null>(null);
 
+    const resultContainerVariants: Variants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.2,
+            },
+        },
+    };
+
+    const resultItemVariants: Variants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { type: "spring", stiffness: 200, damping: 30 },
+        },
+    };
+
+
     useEffect(() => {
-        if (typeof window !== 'undefined' && window.localStorage) {
-            setToken(localStorage.getItem('auth_token'));
+        setShowingResults(false);
+    }, [setShowingResults]);
+
+    useEffect(() => {
+        if (typeof window !== "undefined" && window.localStorage) {
+            setToken(localStorage.getItem("auth_token"));
         }
     }, []);
 
@@ -262,6 +311,7 @@ export default function DashboardPage() {
         setError(null);
         setResult(null);
         setHasStartedScan(true);
+        setShowingResults(false);
 
         const fileBytes = await file.arrayBuffer();
 
@@ -271,7 +321,7 @@ export default function DashboardPage() {
                 body: fileBytes,
                 headers: {
                     "Content-Type": "application/octet-stream",
-                    "Authorization": `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
                 },
             });
 
@@ -281,21 +331,19 @@ export default function DashboardPage() {
                 const data = JSON.parse(responseText);
                 if (!response.ok) {
                     setError(data.error || responseText || "An unknown error occurred");
+                    setShowingResults(false);
                 } else {
                     setResult({ ...data, filename: data.filename || file.name });
+                    setShowingResults(true);
                 }
             } catch {
                 console.error("Client failed to parse JSON response:", responseText);
-
-                if (responseText.includes("Error code 524") && responseText.includes("A timeout occurred")) {
-                    setError("The analysis service timed out. This can happen on a poor internet connection or when Celestial is under heavy load. Please try again in a few minutes.");
-                } else {
-                    console.error(responseText);
-                    setError(`An unexpected server response was received`);
-                }
+                setError(`An unexpected server response was received`);
+                setShowingResults(false);
             }
         } catch (err) {
             setError(err instanceof Error ? err.message : "A network error occurred");
+            setShowingResults(false);
         } finally {
             setLoading(false);
         }
@@ -306,51 +354,52 @@ export default function DashboardPage() {
         setResult(null);
         setError(null);
         setHasStartedScan(false);
+        setShowingResults(false);
         if (fileInputRef.current) {
-            fileInputRef.current.value = '';
+            fileInputRef.current.value = "";
         }
     };
 
     return (
-        <div className="bg-black text-white min-h-screen">
+        <div className="bg-background text-white min-h-screen">
             <div className="container mx-auto px-4 sm:px-6 py-8">
 
                 {loading && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center min-h-[80vh] space-y-6">
+                    <div className="flex flex-col items-center justify-center min-h-[80vh] space-y-6">
                         <div className="w-16 h-16 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
                         <div className="text-center">
                             <h2 className="text-2xl font-semibold">Analyzing File</h2>
-                            <p className="text-neutral-400">Please wait while the analysis is completed...</p>
+                            <p className="text-muted-foreground">Please wait while the analysis is completed...</p>
                         </div>
-                    </motion.div>
+                    </div>
                 )}
 
                 {error && !loading && (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="max-w-md mx-auto">
-                        <div className="bg-red-900/50 border mt-4 border-red-700 rounded-2xl p-6">
+                    <div className="max-w-md mx-auto">
+                        <div className="bg-destructive/20 border mt-4 border-destructive/30 rounded-2xl p-6">
                             <div className="flex items-center gap-3">
-                                <AlertTriangle className="w-6 h-6 text-red-400" />
+                                <AlertTriangle className="w-6 h-6 text-destructive" />
                                 <div>
-                                    <h3 className="text-lg font-semibold text-red-400">Scan Error</h3>
-                                    <p className="text-red-300">{error}</p>
+                                    <h3 className="text-lg font-semibold text-destructive">Scan Error</h3>
+                                    <p className="text-destructive/80">{error}</p>
                                 </div>
                             </div>
                         </div>
-                    </motion.div>
+                    </div>
                 )}
 
                 {!loading && !hasStartedScan && (
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center justify-center min-h-[80vh] text-center">
+                    <div className="flex flex-col items-center justify-center min-h-[80vh] text-center">
                         <div className="p-4 bg-transparent rounded-full mb-4">
                             <Upload className="w-12 h-12 text-accent" />
                         </div>
                         <h2 className="text-2xl font-bold text-white mb-2">Upload File for Analysis</h2>
-                        <p className="text-neutral-400 mb-6 max-w-md">Select a file to scan for potential threats. Maximum file size is 500MB.</p>
+                        <p className="text-muted-foreground mb-6 max-w-md">Select a file to scan for potential threats. Maximum file size is 500MB.</p>
                         <div className="max-w-md w-full space-y-4">
                             <input
                                 ref={fileInputRef}
                                 type="file"
-                                className="w-full text-sm text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent file:text-white hover:file:bg-accent"
+                                className="w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent file:text-white hover:file:bg-accent/90"
                                 onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
                             />
                             <Button
@@ -366,30 +415,33 @@ export default function DashboardPage() {
                                 Start Scan
                             </Button>
                         </div>
-                    </motion.div>
+                    </div>
                 )}
 
                 {result && !loading && (
-                    <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.1 } } }} className="space-y-6">
-                        <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="text-center">
+                    <motion.div initial="hidden" animate="visible"
+                                variants={resultContainerVariants} className="space-y-6">
+                        <motion.div variants={resultItemVariants}
+                                    className="text-center">
                             <h2 className="text-3xl font-bold text-white mt-6 mb-2">Scan Results</h2>
-                            <p className="text-neutral-400">Comprehensive security analysis complete.</p>
-                            <Button onClick={resetScan} variant="secondary" className="mt-4 text-blue-400">
+                            <p className="text-muted-foreground">Comprehensive security analysis complete.</p>
+                            <Button onClick={resetScan} className="mt-4">
                                 <RotateCcw className="w-4 h-4 mr-2" />
                                 Scan Another File
                             </Button>
                         </motion.div>
 
-                        <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
+                        <motion.div variants={resultItemVariants}>
                             <ThreatOverview result={result} />
                         </motion.div>
 
-                        <motion.div className="grid md:grid-cols-2 gap-6" variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
+                        <motion.div className="grid md:grid-cols-2 gap-6"
+                                    variants={resultItemVariants}>
                             <FileProperties result={result} />
                             <SecurityAnalysis result={result} />
                         </motion.div>
 
-                        <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
+                        <motion.div variants={resultItemVariants}>
                             <SuspiciousStrings result={result} />
                         </motion.div>
                     </motion.div>
@@ -398,3 +450,4 @@ export default function DashboardPage() {
         </div>
     );
 }
+
