@@ -6,6 +6,7 @@
 /*noinspection CssUnresolvedCustomProperty*/
 @theme inline {
   --color-background: var(--background);
+  --color-background-transparent: var(--background-transparent);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -87,6 +88,7 @@
 
 .dark {
   --background: oklch(0.10 0.06 195);
+  --background-transparent: oklch(0.117 0.02 202.626 / 0.90);
   --foreground: oklch(1 0 89.876);
   --card: oklch(0.15 0.06 195);
   --card-foreground: oklch(0.985 0 0);

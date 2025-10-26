@@ -6,7 +6,7 @@ interface MagicTextProps {
 
 export default function MagicText({text}: MagicTextProps) {
     return (
-        <div className="relative">
+        <div className="relative select-none">
             <h1
                 className="absolute inset-0 text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-medium tracking-tight
                 bg-clip-text text-transparent

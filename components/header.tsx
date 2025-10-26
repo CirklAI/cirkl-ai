@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import HamburgerMorph from "./ui/hamburger-morph";
-import { IconChevronRight } from "@tabler/icons-react";
+import { IconChevronRight, IconLayoutSidebarLeftCollapse, IconLayoutSidebarRightCollapse } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IconCirkl } from "./ui/icons";
@@ -78,16 +78,31 @@ const Breadcrumb = () => {
 };
 
 export default function Header() {
-  const { isSidebarOpen, toggleSidebar } = useSidebar();
+  const { isSidebarOpen, toggleSidebar, isDesktopSidebarOpen, toggleDesktopSidebar } = useSidebar();
 
   return (
-    <header className="fixed top-0 left-0 w-full h-16 border-b-2 bg-background/80 backdrop-blur-xl border-border grid grid-cols-3 items-center px-6 z-[1000]">
+    <header className="fixed top-0 left-0 w-full h-16 border-b-2 select-none bg-background-transparent backdrop-blur-xl border-border grid grid-cols-3 items-center px-6 z-[1000]">
       <div className="flex items-center gap-4">
-        <HamburgerMorph isOpen={isSidebarOpen} onClick={toggleSidebar} />
-        <Breadcrumb />
+        <div className="md:hidden">
+          <HamburgerMorph isOpen={isSidebarOpen} onClick={toggleSidebar} />
+        </div>
+        <div className="md:hidden">
+          <Link href="/">
+            <IconCirkl size={24} />
+          </Link>
+        </div>
+        <div className="hidden md:flex items-center gap-4">
+          <button 
+            className="hidden md:block"
+            onClick={toggleDesktopSidebar}
+          >
+            {isDesktopSidebarOpen ? <IconLayoutSidebarLeftCollapse size={24} /> : <IconLayoutSidebarRightCollapse size={24} />}
+          </button>
+          <Breadcrumb />
+        </div>
       </div>
 
-      <div className="flex items-center justify-center">
+      <div className="hidden md:flex items-center justify-center">
         <Link href="/">
           <IconCirkl size={24} />
         </Link>
