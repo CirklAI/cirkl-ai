@@ -4,19 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fa0452ef-f11e-4fc4-9c4c-be0b0253f81a" name="Changes" comment="docker">
-      <change afterPath="$PROJECT_DIR$/components/ui/dropzone.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashboard/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/globals.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/client-layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/client-layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/hero.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/hero.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/sidebar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/macbook.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/magic-text.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ui/magic-text.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/hooks/useSidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/lib/hooks/useSidebar.tsx" afterDir="false" />
-    </list>
+    <list default="true" id="fa0452ef-f11e-4fc4-9c4c-be0b0253f81a" name="Changes" comment="docker" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -180,7 +168,7 @@
       <workItem from="1758424088072" duration="214000" />
       <workItem from="1758424326666" duration="311000" />
       <workItem from="1761489791734" duration="755000" />
-      <workItem from="1761520324800" duration="551000" />
+      <workItem from="1761520324800" duration="1056000" />
     </task>
     <task id="LOCAL-00001" summary="update wording">
       <option name="closed" value="true" />

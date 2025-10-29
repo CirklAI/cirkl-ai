@@ -12,7 +12,28 @@ export default function ClientLayout({
   children: React.ReactNode;
 }) {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-  const { isSidebarOpen, toggleSidebar, isDesktopSidebarOpen, sidebarWidth, isResizing } = useSidebar();
+  const {
+    isSidebarOpen,
+    toggleSidebar,
+    isDesktopSidebarOpen,
+    sidebarWidth,
+    isResizing,
+    toggleDesktopSidebar,
+  } = useSidebar();
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        if (isDesktopSidebarOpen) {
+          toggleDesktopSidebar();
+        }
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isDesktopSidebarOpen, toggleDesktopSidebar]);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -45,11 +66,9 @@ export default function ClientLayout({
     <>
       <div className="flex flex-col md:flex-row">
         <Header />
-        <Sidebar
-          userInfo={userInfo}
-        />
+        <Sidebar userInfo={userInfo} />
         <main
-          className={`flex-1 pt-16 ${isResizing ? '' : 'transition-all duration-300 ease-in-out'}`}
+          className={`flex-1 pt-16 ${isResizing ? "" : "transition-all duration-300 ease-in-out"}`}
           style={{ marginLeft: isDesktopSidebarOpen ? sidebarWidth : 0 }}
         >
           {children}
