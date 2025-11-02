@@ -1,41 +1,56 @@
-import { NextRequest } from 'next/server';
+import { NextRequest } from "next/server";
+
+const API_BASE_URL = "http://localhost:8000";
 
 export async function POST(request: NextRequest) {
     const fileBytes = await request.arrayBuffer();
-    const authHeader = request.headers.get('Authorization');
-    let token = '';
+    const authHeader = request.headers.get("Authorization");
+    let token = "";
 
-    if (authHeader && authHeader.startsWith('Bearer ')) {
+    if (authHeader && authHeader.startsWith("Bearer ")) {
         token = authHeader.substring(7);
     } else {
-        return new Response(JSON.stringify({ error: "Unauthorized: No valid token provided" }), {
-            status: 401,
-            headers: { "Content-Type": "application/json" }
-        });
+        return new Response(
+            JSON.stringify({ error: "Unauthorized: No valid token provided" }),
+            {
+                status: 401,
+                headers: { "Content-Type": "application/json" },
+            },
+        );
     }
 
     if (!fileBytes || fileBytes.byteLength < 1) {
-        return new Response(JSON.stringify({ error: "No valid file provided" }), {
-            status: 400,
-            headers: { "Content-Type": "application/json" }
-        });
+        return new Response(
+            JSON.stringify({ error: "No valid file provided" }),
+            {
+                status: 400,
+                headers: { "Content-Type": "application/json" },
+            },
+        );
     }
 
     const MAX_FILE_SIZE_BYTES = 500 * 1024 * 1024;
     if (fileBytes.byteLength > MAX_FILE_SIZE_BYTES) {
-        return new Response(JSON.stringify({ error: `Request too large: Max size is ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB` }), {
-            status: 413,
-            headers: { "Content-Type": "application/json" }
-        });
+        return new Response(
+            JSON.stringify({
+                error: `Request too large: Max size is ${
+                    MAX_FILE_SIZE_BYTES / (1024 * 1024)
+                }MB`,
+            }),
+            {
+                status: 413,
+                headers: { "Content-Type": "application/json" },
+            },
+        );
     }
 
     try {
-        const response = await fetch("https://api.cirkl.ai/scan", {
+        const response = await fetch(API_BASE_URL + "/scan", {
             method: "POST",
             body: fileBytes,
             headers: {
                 "Content-Type": "application/octet-stream",
-                "Authorization": `Bearer ${token}`
+                "Authorization": `Bearer ${token}`,
             },
         });
 
@@ -52,17 +67,21 @@ export async function POST(request: NextRequest) {
             status: response.status,
             headers: { "Content-Type": "application/json" },
         });
-
     } catch (error) {
         if (error instanceof Error) {
-            console.error('ERROR during scan proxy request:', error.message);
+            console.error("ERROR during scan proxy request:", error.message);
         } else {
             console.error("Unknown scan proxy error:", error);
         }
 
-        return new Response(JSON.stringify({ error: "Internal server error during scan proxy" }), {
-            status: 500,
-            headers: { "Content-Type": "application/json" }
-        });
+        return new Response(
+            JSON.stringify({
+                error: "Internal server error during scan proxy",
+            }),
+            {
+                status: 500,
+                headers: { "Content-Type": "application/json" },
+            },
+        );
     }
 }
