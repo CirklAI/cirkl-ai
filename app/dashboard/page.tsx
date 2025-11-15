@@ -2,7 +2,28 @@
 
 import {motion, Variants} from "framer-motion";
 import {useEffect, useState} from "react";
-import {AlertTriangle, Bug, FileText, RotateCcw, ShieldAlert, ShieldCheck, Zap,} from "lucide-react";
+import {
+    Activity,
+    AlertTriangle,
+    Binary,
+    Bug,
+    ClipboardCheck,
+    FileText,
+    Footprints,
+    Gavel,
+    Hash,
+    Percent,
+    RotateCcw,
+    Ruler,
+    Scale,
+    ShieldAlert,
+    ShieldCheck,
+    Sigma,
+    Telescope,
+    Tornado,
+    Weight,
+    Zap,
+} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Dropzone} from "@/components/ui/dropzone";
 
@@ -18,7 +39,16 @@ type ScanResult = {
     entropy: number;
     malware_family: string | null;
     suspicion_score: number;
+    byte_frequency_anomaly: number;
+    chi_square_score: number;
+    longest_repeating_sequence: number;
+    unique_byte_ratio: number;
+    anomalous_patterns: string[];
+    steganography_indicators_present: boolean;
+    steganography_score: number;
 };
+
+const boolToString = (value: boolean) => (value ? 'Yes' : 'No');
 
 function ThreatOverview({result}: { result: ScanResult }) {
     const isClean = result.verdict.toLowerCase() === 'clean';
@@ -39,7 +69,9 @@ function ThreatOverview({result}: { result: ScanResult }) {
 
                 <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Status</span>
+                        <span className="text-muted-foreground flex items-center gap-2">
+                            <ClipboardCheck className="w-4 h-4 text-primary"/> Status
+                        </span>
                         <div
                             className={`px-3 py-1 rounded-full text-sm font-medium ${isClean ? 'bg-primary/20 text-primary' : 'bg-destructive/20 text-destructive'}`}>
                             {result.verdict}
@@ -48,18 +80,24 @@ function ThreatOverview({result}: { result: ScanResult }) {
 
                     {result.detection_reason && (
                         <div className="flex justify-between items-start gap-4">
-                            <span className="text-muted-foreground">Detection Reason</span>
+                            <span className="text-muted-foreground flex items-center gap-2">
+                                <Gavel className="w-4 h-4 text-destructive"/> Detection Reason
+                            </span>
                             <span className="text-accent text-right text-sm max-w-sm">{result.detection_reason}</span>
                         </div>
                     )}
 
                     <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Suspicion Score</span>
-                        <span className="text-foreground font-medium">{result.suspicion_score}</span>
+                        <span className="text-muted-foreground flex items-center gap-2">
+                            <Weight className="w-4 h-4 text-primary"/> Suspicion Score
+                        </span>
+                        <span className="text-foreground font-medium">{result.suspicion_score.toFixed(2)}</span>
                     </div>
 
                     <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">File Name</span>
+                        <span className="text-muted-foreground flex items-center gap-2">
+                            <FileText className="w-4 h-4 text-primary"/> File Name
+                        </span>
                         <span className="text-foreground font-mono text-sm">{result.filename || "Unknown"}</span>
                     </div>
                 </div>
@@ -74,7 +112,7 @@ function FileProperties({result}: { result: ScanResult }) {
             <div className="p-6">
                 <div className="flex items-center gap-3 mb-4">
                     <div className="p-2 bg-popover rounded-lg">
-                        <FileText className="w-6 h-6 text-white"/>
+                        <FileText className="w-6 h-6 text-foreground"/>
                     </div>
                     <div>
                         <h3 className="text-lg font-semibold text-white">File Properties</h3>
@@ -83,17 +121,24 @@ function FileProperties({result}: { result: ScanResult }) {
                 </div>
 
                 <div className="space-y-4">
-                    <div className="bg-popover rounded-lg p-3">
-                        <div className="text-neutral-400 text-xs uppercase tracking-wide mb-1">Executable</div>
-                        <div className="text-white font-medium">{result.is_executable ? "Yes" : "No"}</div>
+                    <div className="bg-popover rounded-lg p-3 flex items-center justify-between">
+                        <div className="flex flex-col">
+                            <div className="text-neutral-400 text-xs uppercase tracking-wide mb-1 flex items-center gap-2">
+                                <Binary className="w-4 h-4 text-accent"/> Executable
+                            </div>
+                            <div className="text-white font-medium">{boolToString(result.is_executable)}</div>
+                        </div>
                         {!result.is_executable && (
-                            <p className="text-red-400 text-sm mt-1">
-                                Note: Designed for executables; non-executable file scanning is experimental.
+                            <p className="text-red-400 text-sm max-w-xs text-right">
+                                Note: Non-executable file scanning is experimental.
                             </p>
                         )}
                     </div>
+
                     <div className="bg-popover rounded-lg p-3">
-                        <div className="text-neutral-400 text-xs uppercase tracking-wide mb-2">File Hash (SHA256)</div>
+                        <div className="text-neutral-400 text-xs uppercase tracking-wide mb-2 flex items-center gap-2">
+                            <Hash className="w-4 h-4 text-accent"/> File Hash (SHA256)
+                        </div>
                         <div className="text-neutral-300 font-mono text-sm break-all bg-card p-3 rounded">
                             {result.file_hash || "Not available"}
                         </div>
@@ -108,9 +153,9 @@ const getMalwareColorClass = (malwareType: string) => {
     const colorMap: { [key: string]: string } = {
         "Clean": 'bg-primary/20 text-primary',
         "UnknownVirusMalicious": 'bg-destructive/20 text-destructive',
-        "Ransomware": 'bg-accent/20 text-accent',
-        "CredentialStealerGeneric": 'bg-accent/20 text-accent',
-        "TokenStealerGeneric": 'bg-accent/20 text-accent',
+        "Ransomware": 'bg-destructive/20 text-destructive',
+        "CredentialStealerGeneric": 'bg-destructive/20 text-destructive',
+        "TokenStealerGeneric": 'bg-destructive/20 text-destructive',
         "ForkBombGeneric": 'bg-destructive/20 text-destructive',
         "RegeditGeneric": 'bg-secondary/20 text-secondary-foreground',
         "TrojanGeneric": 'bg-destructive/20 text-destructive',
@@ -159,9 +204,11 @@ function SecurityAnalysis({result}: { result: ScanResult }) {
                 <div className="space-y-4">
                     <div className="bg-popover rounded-lg p-4">
                         <div className="flex justify-between items-center mb-2">
-                            <span className="text-muted-foreground">N-Gram Score</span>
+                            <span className="text-muted-foreground flex items-center gap-2">
+                                <Footprints className="w-4 h-4 text-accent"/> N-Gram Score
+                            </span>
                             <div className={`px-2 py-0.5 rounded-full text-xs font-medium ${ngram.color}`}>
-                                {result.ngram_score.toFixed(2)} ({ngram.level})
+                                {result.ngram_score.toFixed(4)} ({ngram.level})
                             </div>
                         </div>
                         <div className="w-full bg-muted rounded-full h-1.5">
@@ -172,7 +219,9 @@ function SecurityAnalysis({result}: { result: ScanResult }) {
                         {result.entropy !== 0.0 && (
                             <>
                                 <div className="flex justify-between items-center mb-2 mt-4">
-                                    <span className="text-muted-foreground">Randomness Score</span>
+                                    <span className="text-muted-foreground flex items-center gap-2">
+                                        <Tornado className="w-4 h-4 text-accent"/> Randomness Score (Entropy)
+                                    </span>
                                     <div className={`px-2 py-0.5 rounded-full text-xs font-medium ${entropy.color}`}>
                                         {result.entropy.toFixed(2)} ({entropy.level})
                                     </div>
@@ -184,15 +233,107 @@ function SecurityAnalysis({result}: { result: ScanResult }) {
                             </>
                         )}
                     </div>
+
                     <div className="bg-popover rounded-lg p-4">
                         <div className="flex justify-between items-center">
-                            <span className="text-muted-foreground">Malware Classification</span>
+                            <span className="text-muted-foreground flex items-center gap-2">
+                                <Bug className="w-4 h-4 text-destructive"/> Malware Classification
+                            </span>
                             <div
                                 className={`px-3 py-1 rounded-full text-sm font-medium ${getMalwareColorClass(result.malware_type)}`}>
                                 {displayClassification}
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function StatisticalAnalysis({result}: { result: ScanResult }) {
+    return (
+        <div className="bg-card/50 border border-border rounded-2xl">
+            <div className="p-6">
+                <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 bg-secondary/30 rounded-lg">
+                        <Sigma className="w-6 h-6 text-foreground"/>
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-semibold text-white">Statistical Analysis</h3>
+                        <p className="text-muted-foreground text-sm">Low-level data distribution metrics</p>
+                    </div>
+                </div>
+
+                <div className="space-y-3">
+                    <div className="flex justify-between items-center bg-popover rounded-lg p-3">
+                        <div className="flex items-center gap-3">
+                            <Percent className="w-5 h-5 text-accent"/>
+                            <span className="text-muted-foreground">Unique Byte Ratio</span>
+                        </div>
+                        <span className="text-foreground font-medium">{result.unique_byte_ratio.toFixed(2)}</span>
+                    </div>
+
+                    <div className="flex justify-between items-center bg-popover rounded-lg p-3">
+                        <div className="flex items-center gap-3">
+                            <Ruler className="w-5 h-5 text-primary"/>
+                            <span className="text-muted-foreground">Longest Repeat Sequence</span>
+                        </div>
+                        <span className="text-foreground font-medium">{result.longest_repeating_sequence} bytes</span>
+                    </div>
+
+                    <div className="flex justify-between items-center bg-popover rounded-lg p-3">
+                        <div className="flex items-center gap-3">
+                            <Scale className="w-5 h-5 text-accent"/>
+                            <span className="text-muted-foreground">Chi-Square Score</span>
+                        </div>
+                        <span className="text-foreground font-medium">{result.chi_square_score.toFixed(2)}</span>
+                    </div>
+
+                    <div className="flex justify-between items-center bg-popover rounded-lg p-3">
+                        <div className="flex items-center gap-3">
+                            <Activity className="w-5 h-5 text-destructive"/>
+                            <span className="text-muted-foreground">Byte Frequency Anomaly</span>
+                        </div>
+                        <span className="text-foreground font-medium">{result.byte_frequency_anomaly.toFixed(6)}</span>
+                    </div>
+
+                    <div className="flex items-start gap-3 bg-popover rounded-lg p-3">
+                        <Telescope className="w-5 h-5 text-primary flex-shrink-0 mt-0.5"/>
+                        <div className="flex-grow">
+                            <div className="text-white font-medium mb-1">Steganography Indicators</div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-muted-foreground text-sm">Potential Hidden Data</span>
+                                <div
+                                    className={`px-2 py-0.5 rounded-full text-xs font-medium ${result.steganography_indicators_present ? 'bg-accent/20 text-accent' : 'bg-primary/20 text-primary'}`}>
+                                    {boolToString(result.steganography_indicators_present)}
+                                </div>
+                            </div>
+                            {result.steganography_indicators_present && (
+                                <p className="text-accent text-sm mt-1">
+                                    Score: {result.steganography_score.toFixed(3)}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+
+                    {result.anomalous_patterns.length > 0 && (
+                        <div className="bg-popover rounded-lg p-3">
+                            <div className="flex items-center gap-3 mb-2">
+                                <AlertTriangle className="w-5 h-5 text-destructive"/>
+                                <div className="text-neutral-400 text-xs uppercase tracking-wide">Anomalous Patterns Detected</div>
+                            </div>
+                            <div className="space-y-1">
+                                {result.anomalous_patterns.map((pattern, i) => (
+                                    <span key={i}
+                                          className="inline-block bg-card text-xs text-destructive px-2 py-1 rounded-full mr-2">
+                                        {pattern}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                 </div>
             </div>
         </div>
@@ -222,8 +363,8 @@ function SuspiciousImports({result}: { result: ScanResult }) {
                         <div className="flex items-center gap-2">
                             <AlertTriangle className="w-4 h-4 text-destructive"/>
                             <span className="text-destructive text-sm font-medium">
-                Found {suspiciousImports.length} suspicious import{suspiciousImports.length > 1 ? 's' : ''}
-              </span>
+                                Found {suspiciousImports.length} suspicious import{suspiciousImports.length > 1 ? 's' : ''}
+                            </span>
                         </div>
                         <div className="bg-popover rounded-lg p-3 max-h-64 overflow-y-auto space-y-3">
                             {suspiciousImports.map((importName, i) => (
@@ -310,7 +451,14 @@ export default function DashboardPage() {
                         ...data,
                         suspicious_imports: data.suspicious_imports || data.suspicions || [],
                         file_hash: data.file_hash || data.sha256_hash || null,
-                        filename: data.filename || file.name
+                        filename: data.filename || file.name,
+                        byte_frequency_anomaly: data.byte_frequency_anomaly ?? 0,
+                        chi_square_score: data.chi_square_score ?? 0,
+                        longest_repeating_sequence: data.longest_repeating_sequence ?? 0,
+                        unique_byte_ratio: data.unique_byte_ratio ?? 0,
+                        anomalous_patterns: data.anomalous_patterns ?? [],
+                        steganography_indicators_present: data.steganography_indicators_present ?? false,
+                        steganography_score: data.steganography_score ?? 0,
                     };
                     setResult(mappedData);
                 }
@@ -410,7 +558,9 @@ export default function DashboardPage() {
                             <SecurityAnalysis result={result}/>
                         </motion.div>
 
-                        <motion.div variants={resultItemVariants}>
+                        <motion.div className="grid md:grid-cols-2 gap-6"
+                                    variants={resultItemVariants}>
+                            <StatisticalAnalysis result={result}/>
                             <SuspiciousImports result={result}/>
                         </motion.div>
                     </motion.div>

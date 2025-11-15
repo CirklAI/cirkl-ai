@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fa0452ef-f11e-4fc4-9c4c-be0b0253f81a" name="Changes" comment="new ui design, update for celestial v2">
+    <list default="true" id="fa0452ef-f11e-4fc4-9c4c-be0b0253f81a" name="Changes" comment="a">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashboard/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/api.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -169,7 +170,8 @@
       <workItem from="1763232641975" duration="279000" />
       <workItem from="1763232923396" duration="911000" />
       <workItem from="1763235111270" duration="1423000" />
-      <workItem from="1763237005499" duration="5000" />
+      <workItem from="1763237005499" duration="11000" />
+      <workItem from="1763247025909" duration="462000" />
     </task>
     <task id="LOCAL-00001" summary="update wording">
       <option name="closed" value="true" />
@@ -227,7 +229,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763233837031</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="a">
+      <option name="closed" value="true" />
+      <created>1763237015368</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1763237015368</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -241,7 +251,8 @@
     <MESSAGE value="new buttons" />
     <MESSAGE value="docker" />
     <MESSAGE value="new ui design, update for celestial v2" />
-    <option name="LAST_COMMIT_MESSAGE" value="new ui design, update for celestial v2" />
+    <MESSAGE value="a" />
+    <option name="LAST_COMMIT_MESSAGE" value="a" />
   </component>
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>
