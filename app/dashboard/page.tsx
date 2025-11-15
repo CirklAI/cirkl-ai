@@ -81,7 +81,7 @@ function ThreatOverview({result}: { result: ScanResult }) {
                     {result.detection_reason && (
                         <div className="flex justify-between items-start gap-4">
                             <span className="text-muted-foreground flex items-center gap-2">
-                                <Gavel className="w-4 h-4 text-destructive"/> Detection Reason
+                                <Gavel className="w-4 h-4 text-accent"/> Detection Reason
                             </span>
                             <span className="text-accent text-right text-sm max-w-sm">{result.detection_reason}</span>
                         </div>
@@ -237,7 +237,7 @@ function SecurityAnalysis({result}: { result: ScanResult }) {
                     <div className="bg-popover rounded-lg p-4">
                         <div className="flex justify-between items-center">
                             <span className="text-muted-foreground flex items-center gap-2">
-                                <Bug className="w-4 h-4 text-destructive"/> Malware Classification
+                                <Bug className="w-4 h-4 text-accent"/> Malware Classification
                             </span>
                             <div
                                 className={`px-3 py-1 rounded-full text-sm font-medium ${getMalwareColorClass(result.malware_type)}`}>
@@ -292,7 +292,7 @@ function StatisticalAnalysis({result}: { result: ScanResult }) {
 
                     <div className="flex justify-between items-center bg-popover rounded-lg p-3">
                         <div className="flex items-center gap-3">
-                            <Activity className="w-5 h-5 text-destructive"/>
+                            <Activity className="w-5 h-5 text-accent"/>
                             <span className="text-muted-foreground">Byte Frequency Anomaly</span>
                         </div>
                         <span className="text-foreground font-medium">{result.byte_frequency_anomaly.toFixed(6)}</span>
