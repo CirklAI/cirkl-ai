@@ -1,10 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "@/components/header";
-import Sidebar from "@/components/sidebar";
 import { UserInfo } from "@/components/auth-form";
-import { useSidebar } from "@/lib/hooks/useSidebar";
 
 export default function ClientLayout({
   children,
@@ -12,28 +10,6 @@ export default function ClientLayout({
   children: React.ReactNode;
 }) {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-  const {
-    isSidebarOpen,
-    toggleSidebar,
-    isDesktopSidebarOpen,
-    sidebarWidth,
-    isResizing,
-    toggleDesktopSidebar,
-  } = useSidebar();
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        if (isDesktopSidebarOpen) {
-          toggleDesktopSidebar();
-        }
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [isDesktopSidebarOpen, toggleDesktopSidebar]);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -65,20 +41,12 @@ export default function ClientLayout({
   return (
     <>
       <div className="flex flex-col md:flex-row">
-        <Header />
-        <Sidebar userInfo={userInfo} />
+        <Header userInfo={userInfo} />
         <main
-          className={`flex-1 pt-16 ${isResizing ? "" : "transition-all duration-300 ease-in-out"}`}
-          style={{ marginLeft: isDesktopSidebarOpen ? sidebarWidth : 0 }}
+          className={`flex-1 pt-16`}
         >
           {children}
         </main>
-        {isSidebarOpen && (
-          <div
-            className="fixed inset-0 bg-black/50 z-[998] md:hidden"
-            onClick={toggleSidebar}
-          />
-        )}
       </div>
     </>
   );

@@ -1,7 +1,7 @@
 "use client";
 
-import { IconX } from "@tabler/icons-react";
-import { useState } from "react";
+import {IconX} from "@tabler/icons-react";
+import {useState} from "react";
 
 type AuthMode = "login" | "signup";
 
@@ -17,7 +17,7 @@ interface AuthFormProps {
     onClose?: () => void;
 }
 
-function AuthForm({ mode = "login", onModeChange, onSuccess, onClose }: AuthFormProps) {
+function AuthForm({mode = "login", onModeChange, onSuccess, onClose}: AuthFormProps) {
     const [currentMode, setCurrentMode] = useState<AuthMode>(mode);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -29,30 +29,30 @@ function AuthForm({ mode = "login", onModeChange, onSuccess, onClose }: AuthForm
     const validateForm = () => {
         const newErrors: { [key: string]: string } = {};
 
-        if (currentMode === "signup") {
-            if (!name) {
+        if(currentMode === "signup") {
+            if(!name) {
                 newErrors.name = "Name is required";
-            } else if (name.length < 2) {
+            } else if(name.length < 2) {
                 newErrors.name = "Name must be at least 2 characters";
             }
         }
 
-        if (!email) {
+        if(!email) {
             newErrors.email = "Email is required";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        } else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             newErrors.email = "Please enter a valid email address";
         }
 
-        if (!password) {
+        if(!password) {
             newErrors.password = "Password is required";
-        } else if (password.length < 6) {
+        } else if(password.length < 6) {
             newErrors.password = "Password must be at least 6 characters";
         }
 
-        if (currentMode === "signup") {
-            if (!confirmPassword) {
+        if(currentMode === "signup") {
+            if(!confirmPassword) {
                 newErrors.confirmPassword = "Please confirm your password";
-            } else if (password !== confirmPassword) {
+            } else if(password !== confirmPassword) {
                 newErrors.confirmPassword = "Passwords do not match";
             }
         }
@@ -61,10 +61,10 @@ function AuthForm({ mode = "login", onModeChange, onSuccess, onClose }: AuthForm
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!validateForm()) return;
+        if(!validateForm()) return;
 
         setIsLoading(true);
 
@@ -72,16 +72,16 @@ function AuthForm({ mode = "login", onModeChange, onSuccess, onClose }: AuthForm
             const isLogin = currentMode === "login";
             const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register";
             const payload = isLogin
-                ? { email, password }
-                : { email, password, full_name: name };
+                ? {email, password}
+                : {email, password, full_name: name};
 
             const response = await fetch(endpoint, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(payload),
             });
 
-            if (!response.ok) {
+            if(!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
                 console.error("Auth error:", errorData);
                 alert(`${isLogin ? "Login" : "Registration"} failed. Please try again.`);
@@ -91,10 +91,11 @@ function AuthForm({ mode = "login", onModeChange, onSuccess, onClose }: AuthForm
             const data = await response.json();
             localStorage.setItem("auth_token", data.token);
             localStorage.setItem("user_info", JSON.stringify(data.user));
-            
+
             onSuccess?.();
 
-        } catch (error) {
+            window.dispatchEvent(new Event("local-storage"));
+        } catch(error) {
             console.error("Auth error:", error);
             alert(
                 error instanceof Error
@@ -116,8 +117,10 @@ function AuthForm({ mode = "login", onModeChange, onSuccess, onClose }: AuthForm
     };
 
     return (
-        <div className="w-full max-w-md mx-auto">
-            <div className="bg-card shadow-lg rounded-lg p-8">
+        <div
+            className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+        >
+            <div className="w-full max-w-md bg-card shadow-2xl rounded-lg p-8 relative">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold text-card-foreground">
                         {currentMode === "login" ? "Welcome back" : "Create account"}
@@ -126,7 +129,7 @@ function AuthForm({ mode = "login", onModeChange, onSuccess, onClose }: AuthForm
                         onClick={onClose}
                         className="w-8 h-8 bg-muted hover:bg-muted/80 rounded-full flex items-center justify-center text-muted-foreground transition-transform hover:scale-110"
                     >
-                        <IconX size={16} />
+                        <IconX size={16}/>
                     </button>
                 </div>
 

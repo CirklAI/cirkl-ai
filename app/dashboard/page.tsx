@@ -1,31 +1,23 @@
 "use client";
 
 import {motion, Variants} from "framer-motion";
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {AlertTriangle, Bug, FileText, RotateCcw, ShieldAlert, ShieldCheck, Zap,} from "lucide-react";
 import {Button} from "@/components/ui/button";
-import {useSidebar} from "@/lib/hooks/useSidebar";
 import {Dropzone} from "@/components/ui/dropzone";
-
-type Suspicion = {
-    pattern: string;
-    match_text: string | null;
-    weight: number;
-    malware_type: string;
-    signature: string;
-};
 
 type ScanResult = {
     is_executable: boolean;
     ngram_score: number;
-    suspicions: (string | Suspicion)[];
-    sha256_hash: string | null;
+    suspicious_imports: string[];
+    file_hash: string | null;
     malware_type: string;
     verdict: string;
     detection_reason: string | null;
     filename: string | null;
     entropy: number;
     malware_family: string | null;
+    suspicion_score: number;
 };
 
 function ThreatOverview({result}: { result: ScanResult }) {
@@ -62,6 +54,11 @@ function ThreatOverview({result}: { result: ScanResult }) {
                     )}
 
                     <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Suspicion Score</span>
+                        <span className="text-foreground font-medium">{result.suspicion_score}</span>
+                    </div>
+
+                    <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">File Name</span>
                         <span className="text-foreground font-mono text-sm">{result.filename || "Unknown"}</span>
                     </div>
@@ -96,9 +93,9 @@ function FileProperties({result}: { result: ScanResult }) {
                         )}
                     </div>
                     <div className="bg-popover rounded-lg p-3">
-                        <div className="text-neutral-400 text-xs uppercase tracking-wide mb-2">SHA256 Hash</div>
+                        <div className="text-neutral-400 text-xs uppercase tracking-wide mb-2">File Hash (SHA256)</div>
                         <div className="text-neutral-300 font-mono text-sm break-all bg-card p-3 rounded">
-                            {result.sha256_hash || "Not available"}
+                            {result.file_hash || "Not available"}
                         </div>
                     </div>
                 </div>
@@ -117,6 +114,7 @@ const getMalwareColorClass = (malwareType: string) => {
         "ForkBombGeneric": 'bg-destructive/20 text-destructive',
         "RegeditGeneric": 'bg-secondary/20 text-secondary-foreground',
         "TrojanGeneric": 'bg-destructive/20 text-destructive',
+        "PE32_MALWARE": 'bg-destructive/20 text-destructive',
     };
     return colorMap[malwareType] || 'bg-muted/20 text-muted-foreground';
 };
@@ -141,7 +139,8 @@ function SecurityAnalysis({result}: { result: ScanResult }) {
 
     const ngram = getLevelClass(result.ngram_score, {high: 0.02, medium: 0.005});
     const entropy = getLevelClass(result.entropy, {high: 7.0, medium: 4.0});
-    const malwareClassification = `${result.malware_family || 'N/A'}.${result.malware_type || 'N/A'}`;
+
+    const malwareClassification = result.malware_type || 'N/A';
     const displayClassification = malwareClassification.includes("null") || malwareClassification.includes("Failed") ? 'Unable to classify' : malwareClassification;
 
     return (
@@ -200,17 +199,10 @@ function SecurityAnalysis({result}: { result: ScanResult }) {
     );
 }
 
-function SuspiciousStrings({result}: { result: ScanResult }) {
-    const suspicions = result.suspicions.map(s => {
-        if(typeof s === 'string') {
-            try {
-                return JSON.parse(s);
-            } catch {
-                return {pattern: s, weight: 0, match_text: null};
-            }
-        }
-        return s;
-    });
+function SuspiciousImports({result}: { result: ScanResult }) {
+    const suspiciousImports = (result.suspicious_imports || []).filter(
+        importName => importName.toLowerCase() !== 'no'
+    );
 
     return (
         <div className="bg-card/50 border border-border rounded-2xl">
@@ -220,35 +212,27 @@ function SuspiciousStrings({result}: { result: ScanResult }) {
                         <Bug className="w-6 h-6 text-destructive"/>
                     </div>
                     <div>
-                        <h3 className="text-lg font-semibold text-white">Suspicions</h3>
+                        <h3 className="text-lg font-semibold text-white">Suspicious Imports</h3>
                         <p className="text-muted-foreground text-sm">Potential indicators of compromise</p>
                     </div>
                 </div>
 
-                {suspicions.length > 0 ? (
+                {suspiciousImports.length > 0 ? (
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
                             <AlertTriangle className="w-4 h-4 text-destructive"/>
                             <span className="text-destructive text-sm font-medium">
-                Found {suspicions.length} suspicious item{suspicions.length > 1 ? 's' : ''}
+                Found {suspiciousImports.length} suspicious import{suspiciousImports.length > 1 ? 's' : ''}
               </span>
                         </div>
                         <div className="bg-popover rounded-lg p-3 max-h-64 overflow-y-auto space-y-3">
-                            {suspicions.map((suspicion, i) => (
-                                <div key={i} className="bg-card p-3 rounded-lg">
-                                    <div className="flex justify-between items-start">
-                                        <span className="font-semibold text-destructive">{suspicion.pattern}</span>
-                                        <div
-                                            className="bg-destructive/20 text-destructive text-xs px-2 py-0.5 rounded-full">
-                                            Weight: {suspicion.weight}
-                                        </div>
+                            {suspiciousImports.map((importName, i) => (
+                                <div key={i} className="bg-card p-3 rounded-lg flex justify-between items-center">
+                                    <span className="font-mono text-sm text-destructive">{importName}</span>
+                                    <div
+                                        className="bg-destructive/20 text-destructive text-xs px-2 py-0.5 rounded-full">
+                                        Import
                                     </div>
-                                    {suspicion.match_text && (
-                                        <p className="text-muted-foreground text-sm mt-1">
-                                            Match: <code
-                                            className="font-mono bg-muted p-1 rounded">{suspicion.match_text}</code>
-                                        </p>
-                                    )}
                                 </div>
                             ))}
                         </div>
@@ -256,8 +240,8 @@ function SuspiciousStrings({result}: { result: ScanResult }) {
                 ) : (
                     <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 text-center">
                         <ShieldCheck className="w-8 h-8 text-primary mx-auto mb-2"/>
-                        <p className="text-primary font-medium">No Suspicious Items Found</p>
-                        <p className="text-muted-foreground text-sm">The file appears to be clean.</p>
+                        <p className="text-primary font-medium">No Suspicious Imports Found</p>
+                        <p className="text-muted-foreground text-sm">The file appears to contain no suspicious imports.</p>
                     </div>
                 )}
             </div>
@@ -266,7 +250,6 @@ function SuspiciousStrings({result}: { result: ScanResult }) {
 }
 
 export default function DashboardPage() {
-    const {setShowingResults} = useSidebar();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -279,7 +262,6 @@ export default function DashboardPage() {
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.1,
                 delayChildren: 0.2,
             },
         },
@@ -293,11 +275,6 @@ export default function DashboardPage() {
         },
     };
 
-
-    useEffect(() => {
-        setShowingResults(false);
-    }, [setShowingResults]);
-
     useEffect(() => {
         if(typeof window !== "undefined" && window.localStorage) {
             setToken(localStorage.getItem("auth_token"));
@@ -309,7 +286,6 @@ export default function DashboardPage() {
         setError(null);
         setResult(null);
         setHasStartedScan(true);
-        setShowingResults(false);
 
         const fileBytes = await file.arrayBuffer();
 
@@ -329,19 +305,21 @@ export default function DashboardPage() {
                 const data = JSON.parse(responseText);
                 if(!response.ok) {
                     setError(data.error || responseText || "An unknown error occurred");
-                    setShowingResults(false);
                 } else {
-                    setResult({...data, filename: data.filename || file.name});
-                    setShowingResults(true);
+                    const mappedData = {
+                        ...data,
+                        suspicious_imports: data.suspicious_imports || data.suspicions || [],
+                        file_hash: data.file_hash || data.sha256_hash || null,
+                        filename: data.filename || file.name
+                    };
+                    setResult(mappedData);
                 }
             } catch {
                 console.error("Client failed to parse JSON response:", responseText);
                 setError(`An unexpected server response was received`);
-                setShowingResults(false);
             }
         } catch(err) {
             setError(err instanceof Error ? err.message : "A network error occurred");
-            setShowingResults(false);
         } finally {
             setLoading(false);
         }
@@ -352,7 +330,6 @@ export default function DashboardPage() {
         setResult(null);
         setError(null);
         setHasStartedScan(false);
-        setShowingResults(false);
     };
 
     return (
@@ -434,7 +411,7 @@ export default function DashboardPage() {
                         </motion.div>
 
                         <motion.div variants={resultItemVariants}>
-                            <SuspiciousStrings result={result}/>
+                            <SuspiciousImports result={result}/>
                         </motion.div>
                     </motion.div>
                 )}
@@ -442,4 +419,3 @@ export default function DashboardPage() {
         </div>
     );
 }
-

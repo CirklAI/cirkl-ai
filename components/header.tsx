@@ -1,115 +1,107 @@
 "use client";
 
-import { motion } from "framer-motion";
-import HamburgerMorph from "./ui/hamburger-morph";
-import { IconChevronRight, IconLayoutSidebarLeftCollapse, IconLayoutSidebarRightCollapse } from "@tabler/icons-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { IconCirkl } from "./ui/icons";
-import { useSidebar } from "@/lib/hooks/useSidebar";
+import {IconScan, IconLogout, IconHome } from "@tabler/icons-react";
+import { useState } from "react";
+import { UserInfo, AuthForm } from "./auth-form";
 
-const breadcrumbVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
+const headerItems = [
+    {
+        label: "Home",
+        icon: <IconHome size={18} />,
+        href: "/",
     },
-  },
-};
+    {
+        label: "New Scan",
+        icon: <IconScan size={18} />,
+        href: "/dashboard",
+    },
+];
 
-const breadcrumbItemVariants = {
-  hidden: { opacity: 0, y: -10 },
-  visible: { opacity: 1, y: 0 },
-};
+export default function Header({
+                                   userInfo,
+                               }: {
+    userInfo: UserInfo | null;
+}) {
+    const [showAuthModal, setShowAuthModal] = useState(false);
 
-const Breadcrumb = () => {
-  const pathname = usePathname();
-  const { showingResults } = useSidebar();
-  const pathSegments = pathname.split("/").filter((segment) => segment);
+    const handleLogout = () => {
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("user_info");
+        window.dispatchEvent(new Event("local-storage"));
+    };
 
-  return (
-    <motion.nav
-      key={pathname}
-      className="flex items-center text-sm text-muted-foreground"
-      variants={breadcrumbVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <motion.span variants={breadcrumbItemVariants}>
-        <Link href="/" className="hover:text-foreground">
-          Cirkl
-        </Link>
-      </motion.span>
-      {pathSegments.map((segment, index) => {
-        const href = `/${pathSegments.slice(0, index + 1).join("/")}`;
-        const isLast = index === pathSegments.length - 1;
-        return (
-          <motion.span
-            key={href}
-            className="flex items-center"
-            variants={breadcrumbItemVariants}
-          >
-            <IconChevronRight size={16} />
-            <Link
-              href={href}
-              className={`${
-                isLast && !showingResults
-                  ? "text-foreground"
-                  : "hover:text-foreground"
-              }`}
-            >
-              {segment.charAt(0).toUpperCase() + segment.slice(1)}
-            </Link>
-          </motion.span>
-        );
-      })}
-      {pathname === "/dashboard" && showingResults && (
-        <motion.span
-          className="flex items-center"
-          variants={breadcrumbItemVariants}
-        >
-          <IconChevronRight size={16} />
-          <span className="text-foreground">Results</span>
-        </motion.span>
-      )}
-    </motion.nav>
-  );
-};
+    const handleAuthSuccess = () => {
+        setShowAuthModal(false);
+    };
 
-export default function Header() {
-  const { isSidebarOpen, toggleSidebar, isDesktopSidebarOpen, toggleDesktopSidebar } = useSidebar();
+    return (
+        <>
+            {showAuthModal && (
+                <AuthForm
+                    onClose={() => setShowAuthModal(false)}
+                    onSuccess={handleAuthSuccess}
+                />
+            )}
 
-  return (
-    <header className="fixed top-0 left-0 w-full h-16 border-b-2 select-none bg-background-transparent backdrop-blur-xl border-border grid grid-cols-3 items-center px-6 z-[1000]">
-      <div className="flex items-center gap-4">
-        <div className="md:hidden">
-          <HamburgerMorph isOpen={isSidebarOpen} onClick={toggleSidebar} />
-        </div>
-        <div className="md:hidden">
-          <Link href="/">
-            <IconCirkl size={24} />
-          </Link>
-        </div>
-        <div className="hidden md:flex items-center gap-4">
-          <button 
-            className="hidden md:block"
-            onClick={toggleDesktopSidebar}
-          >
-            {isDesktopSidebarOpen ? <IconLayoutSidebarLeftCollapse size={24} /> : <IconLayoutSidebarRightCollapse size={24} />}
-          </button>
-          <Breadcrumb />
-        </div>
-      </div>
+            <header className="fixed top-0 left-0 w-full h-16 border-b-2 select-none bg-background-transparent backdrop-blur-xl border-border grid grid-cols-3 items-center px-6 z-[1000]">
+                <div className="flex items-center gap-4">
+                    <Link href="/" className="hidden md:block">
+                        <IconCirkl size={24} />
+                    </Link>
+                </div>
 
-      <div className="hidden md:flex items-center justify-center">
-        <Link href="/">
-          <IconCirkl size={24} />
-        </Link>
-      </div>
+                <nav className="hidden md:flex items-center justify-center">
+                    <ul className="flex gap-4">
+                        {headerItems.map((item) => (
+                            <li key={item.label}>
+                                <Link
+                                    href={item.href}
+                                    className={`flex items-center gap-2 p-2 rounded-md hover:bg-secondary`}
+                                    title={item.label}
+                                >
+                                    {item.icon}
+                                    <span>{item.label}</span>
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
 
-      <div className="flex items-center justify-end">
-      </div>
-    </header>
-  );
+                <div className="flex items-center justify-end">
+                    {userInfo ? (
+                        <div className={`flex items-center gap-3`}>
+                            <div className="hidden md:block overflow-hidden">
+                                <p className="font-semibold text-sm truncate">
+                                    {userInfo.full_name}
+                                </p>
+                                <p className="text-xs text-muted-foreground truncate">
+                                    {userInfo.email}
+                                </p>
+                            </div>
+                            <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-sm shrink-0" title={userInfo.full_name}>
+                                {userInfo.full_name.charAt(0)}
+                            </div>
+                            <button
+                                onClick={handleLogout}
+                                className="p-2 rounded-md hover:bg-secondary"
+                                title="Logout"
+                            >
+                                <IconLogout size={18} />
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            onClick={() => setShowAuthModal(true)}
+                            className="text-center p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                            title="Login / Register"
+                        >
+                            Login / Register
+                        </button>
+                    )}
+                </div>
+            </header>
+        </>
+    );
 }

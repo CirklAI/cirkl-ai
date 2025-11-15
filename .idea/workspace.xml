@@ -4,7 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fa0452ef-f11e-4fc4-9c4c-be0b0253f81a" name="Changes" comment="docker" />
+    <list default="true" id="fa0452ef-f11e-4fc4-9c4c-be0b0253f81a" name="Changes" comment="docker">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/.server-controller-port.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/auth/login/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/auth/login/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/auth/register/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/auth/register/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/v1/scan/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/scan/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashboard/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/auth-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/auth-form.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/client-layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/client-layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/sidebar.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ui/hamburger-morph.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/hooks/useAppStore.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/hooks/useSidebar.tsx" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -45,7 +61,7 @@
     <option name="version" value="2" />
   </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 7
+  &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="31TRKKkgzBgz41Kw3QtNIbvYitU" />
   <component name="ProjectViewState">
@@ -140,13 +156,6 @@
       <method v="2" />
     </configuration>
   </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-js-predefined-d6986cc7102b-256f9dae541f-JavaScript-IU-253.25908.13" />
-      </set>
-    </attachedChunks>
-  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="fa0452ef-f11e-4fc4-9c4c-be0b0253f81a" name="Changes" comment="" />
@@ -169,6 +178,9 @@
       <workItem from="1758424326666" duration="311000" />
       <workItem from="1761489791734" duration="755000" />
       <workItem from="1761520324800" duration="1056000" />
+      <workItem from="1763232369137" duration="268000" />
+      <workItem from="1763232641975" duration="279000" />
+      <workItem from="1763232923396" duration="874000" />
     </task>
     <task id="LOCAL-00001" summary="update wording">
       <option name="closed" value="true" />

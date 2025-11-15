@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
-
-const API_BASE_URL = "http://localhost:8000";
+import { API_BASE_URL } from "@/lib/api";
 
 export async function POST(request: NextRequest) {
     const fileBytes = await request.arrayBuffer();
