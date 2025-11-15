@@ -4,22 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fa0452ef-f11e-4fc4-9c4c-be0b0253f81a" name="Changes" comment="docker">
+    <list default="true" id="fa0452ef-f11e-4fc4-9c4c-be0b0253f81a" name="Changes" comment="new ui design, update for celestial v2">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/.server-controller-port.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/auth/login/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/auth/login/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/auth/register/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/auth/register/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/v1/scan/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/v1/scan/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashboard/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/globals.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/auth-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/auth-form.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/client-layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/client-layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/sidebar.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/hamburger-morph.tsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/hooks/useAppStore.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/hooks/useSidebar.tsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +167,9 @@
       <workItem from="1761520324800" duration="1056000" />
       <workItem from="1763232369137" duration="268000" />
       <workItem from="1763232641975" duration="279000" />
-      <workItem from="1763232923396" duration="874000" />
+      <workItem from="1763232923396" duration="911000" />
+      <workItem from="1763235111270" duration="1423000" />
+      <workItem from="1763237005499" duration="5000" />
     </task>
     <task id="LOCAL-00001" summary="update wording">
       <option name="closed" value="true" />
@@ -230,7 +219,15 @@
       <option name="project" value="LOCAL" />
       <updated>1758424241874</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="new ui design, update for celestial v2">
+      <option name="closed" value="true" />
+      <created>1763233837030</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1763233837031</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -243,7 +240,8 @@
     <MESSAGE value="fixed auth" />
     <MESSAGE value="new buttons" />
     <MESSAGE value="docker" />
-    <option name="LAST_COMMIT_MESSAGE" value="docker" />
+    <MESSAGE value="new ui design, update for celestial v2" />
+    <option name="LAST_COMMIT_MESSAGE" value="new ui design, update for celestial v2" />
   </component>
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>
