@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fa0452ef-f11e-4fc4-9c4c-be0b0253f81a" name="Changes" comment="fix icon colors">
+    <list default="true" id="fa0452ef-f11e-4fc4-9c4c-be0b0253f81a" name="Changes" comment="aaha">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashboard/page.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,7 +171,8 @@
       <workItem from="1763235111270" duration="1423000" />
       <workItem from="1763237005499" duration="11000" />
       <workItem from="1763247025909" duration="908000" />
-      <workItem from="1763248174707" duration="10000" />
+      <workItem from="1763248174707" duration="15000" />
+      <workItem from="1763251585576" duration="40000" />
     </task>
     <task id="LOCAL-00001" summary="update wording">
       <option name="closed" value="true" />
@@ -253,7 +254,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763247939262</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="aaha">
+      <option name="closed" value="true" />
+      <created>1763248188669</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1763248188669</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -270,7 +279,8 @@
     <MESSAGE value="a" />
     <MESSAGE value="update for new verson" />
     <MESSAGE value="fix icon colors" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix icon colors" />
+    <MESSAGE value="aaha" />
+    <option name="LAST_COMMIT_MESSAGE" value="aaha" />
   </component>
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>

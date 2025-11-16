@@ -116,7 +116,7 @@ function FileProperties({result}: { result: ScanResult }) {
                     </div>
                     <div>
                         <h3 className="text-lg font-semibold text-white">File Properties</h3>
-                        <p className="text-neutral-400 text-sm">Basic file information</p>
+                        <p className="text-sm text-muted-foreground">Basic file information</p>
                     </div>
                 </div>
 
