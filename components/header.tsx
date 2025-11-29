@@ -45,10 +45,13 @@ export default function Header({
                 />
             )}
 
-            <header className="fixed top-0 left-0 w-full h-16 border-b-2 select-none bg-background-transparent backdrop-blur-xl border-border grid grid-cols-3 items-center px-6 z-[1000]">
+            <header className="fixed top-0 left-0 w-full h-20 border-b select-none bg-background backdrop-blur-xl border-border grid grid-cols-3 items-center px-6 z-1000">
                 <div className="flex items-center gap-4">
                     <Link href="/" className="hidden md:block">
-                        <IconCirkl size={24} />
+                        <div className="flex items-center gap-2 flex-row">
+                            <IconCirkl size={24} />
+                            <h1 className="text-2xl font-bold">Cirkl</h1>
+                        </div>
                     </Link>
                 </div>
 

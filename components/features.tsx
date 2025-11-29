@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { ShieldCheck, BrainCircuit, Layers, Zap } from 'lucide-react';
 
 const features = [
@@ -38,33 +39,40 @@ const features = [
 export default function Features() {
     return (
         <div className="w-full">
-            <section className="border-t border-zinc-200 dark:border-zinc-800">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-28 sm:py-32 text-center">
-                    <h2 className="text-5xl sm:text-6xl font-extrabold text-foreground tracking-tight">
-                        Advanced. Inside out.
-                    </h2>
-                    <p className="mt-6 max-w-3xl mx-auto text-xl text-muted-foreground">
-                        Powerful features designed to give you peace of mind.
-                    </p>
-                </div>
-            </section>
+            <section className="border-t border-zinc-200 dark:border-zinc-800 py-28 sm:py-32">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16 sm:mb-24">
+                        <h2 className="text-5xl sm:text-6xl font-extrabold text-foreground tracking-tight">
+                            Advanced. Inside out.
+                        </h2>
+                        <p className="mt-6 max-w-3xl mx-auto text-xl text-muted-foreground">
+                            Powerful features designed to give you peace of mind.
+                        </p>
 
-            {features.map((feature, index) => (
-                <section
-                    key={index}
-                    className="relative border-t"
-                >
-                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-28 sm:py-32">
-                        <div className="max-w-3xl mx-auto text-center">
-                            <div className="mb-8 flex justify-center">{feature.icon}</div>
-                            <h3 className="text-4xl font-bold text-foreground">{feature.title}</h3>
-                            <p className="mt-6 text-lg text-muted-foreground">{feature.description}</p>
+                        <div className="mt-12 relative w-full max-w-5xl mx-auto rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-2xl">
+                            <Image
+                                src="/ui.png"
+                                alt="Application Interface"
+                                width={1200}
+                                height={800}
+                                className="w-full h-auto"
+                            />
                         </div>
                     </div>
-                </section>
-            ))}
 
-            <div className="w-full border-b border-zinc-200 dark:border-zinc-800" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16 lg:gap-x-24 max-w-6xl mx-auto">
+                        {features.map((feature, index) => (
+                            <div key={index} className="flex flex-col items-start text-left">
+                                <div className="mb-6">{feature.icon}</div>
+                                <h3 className="text-3xl font-bold text-foreground mb-4">{feature.title}</h3>
+                                <p className="text-lg text-muted-foreground leading-relaxed">
+                                    {feature.description}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
         </div>
     );
 }

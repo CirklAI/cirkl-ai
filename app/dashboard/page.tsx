@@ -54,51 +54,44 @@ function ThreatOverview({result}: { result: ScanResult }) {
     const isClean = result.verdict.toLowerCase() === 'clean';
 
     return (
-        <div className="bg-card/50 border border-border rounded-2xl">
-            <div className="p-6">
-                <div className="flex items-center gap-4 mb-4">
-                    <div className={`p-3 rounded-full ${isClean ? 'bg-primary/20' : 'bg-destructive/20'}`}>
-                        {isClean ? <ShieldCheck className="w-8 h-8 text-primary"/> :
-                            <ShieldAlert className="w-8 h-8 text-destructive"/>}
+        <div className="bg-card border border-border rounded-xl h-full flex flex-col">
+            <div className="p-4 flex flex-col h-full">
+                <div className="flex items-center gap-3 mb-4">
+                    <div className={`p-2.5 rounded-lg ${isClean ? 'bg-primary/20' : 'bg-destructive/20'}`}>
+                        {isClean ? <ShieldCheck className="w-6 h-6 text-primary"/> :
+                            <ShieldAlert className="w-6 h-6 text-destructive"/>}
                     </div>
                     <div>
-                        <h3 className="text-xl font-semibold text-white">Threat Assessment</h3>
-                        <p className="text-muted-foreground">Security scan results</p>
+                        <h3 className="font-semibold text-white text-lg">Threat Assessment</h3>
+                        <p className="text-xs text-muted-foreground">Security scan results</p>
                     </div>
                 </div>
 
-                <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground flex items-center gap-2">
+                <div className="space-y-3 grow">
+                    <div className="flex justify-between items-center p-3 bg-muted/30 rounded-lg">
+                        <span className="text-muted-foreground text-sm flex items-center gap-2">
                             <ClipboardCheck className="w-4 h-4 text-primary"/> Status
                         </span>
                         <div
-                            className={`px-3 py-1 rounded-full text-sm font-medium ${isClean ? 'bg-primary/20 text-primary' : 'bg-destructive/20 text-destructive'}`}>
+                            className={`px-2.5 py-1 rounded-md text-xs font-medium ${isClean ? 'bg-primary/20 text-primary' : 'bg-destructive/20 text-destructive'}`}>
                             {result.verdict}
                         </div>
                     </div>
 
                     {result.detection_reason && (
-                        <div className="flex justify-between items-start gap-4">
-                            <span className="text-muted-foreground flex items-center gap-2">
+                        <div className="p-3 bg-muted/30 rounded-lg">
+                            <span className="text-muted-foreground text-xs flex items-center gap-1.5 mb-1.5">
                                 <Gavel className="w-4 h-4 text-accent"/> Detection Reason
                             </span>
-                            <span className="text-accent text-right text-sm max-w-sm">{result.detection_reason}</span>
+                            <p className="text-accent text-xs leading-relaxed">{result.detection_reason}</p>
                         </div>
                     )}
 
-                    <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground flex items-center gap-2">
+                    <div className="flex justify-between items-center p-3 bg-muted/30 rounded-lg mt-auto">
+                        <span className="text-muted-foreground text-sm flex items-center gap-2">
                             <Weight className="w-4 h-4 text-primary"/> Suspicion Score
                         </span>
-                        <span className="text-foreground font-medium">{result.suspicion_score.toFixed(2)}</span>
-                    </div>
-
-                    <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground flex items-center gap-2">
-                            <FileText className="w-4 h-4 text-primary"/> File Name
-                        </span>
-                        <span className="text-foreground font-mono text-sm">{result.filename || "Unknown"}</span>
+                        <span className="text-foreground font-medium text-sm">{result.suspicion_score.toFixed(2)}</span>
                     </div>
                 </div>
             </div>
@@ -108,38 +101,43 @@ function ThreatOverview({result}: { result: ScanResult }) {
 
 function FileProperties({result}: { result: ScanResult }) {
     return (
-        <div className="bg-card/50 border border-border rounded-2xl">
-            <div className="p-6">
+        <div className="bg-card border border-border rounded-xl h-full flex flex-col">
+            <div className="p-4 flex flex-col h-full">
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-popover rounded-lg">
+                    <div className="p-2.5 bg-secondary/30 rounded-lg">
                         <FileText className="w-6 h-6 text-foreground"/>
                     </div>
                     <div>
-                        <h3 className="text-lg font-semibold text-white">File Properties</h3>
-                        <p className="text-sm text-muted-foreground">Basic file information</p>
+                        <h3 className="font-semibold text-white text-lg">File Properties</h3>
+                        <p className="text-xs text-muted-foreground">Basic file information</p>
                     </div>
                 </div>
 
-                <div className="space-y-4">
-                    <div className="bg-popover rounded-lg p-3 flex items-center justify-between">
+                <div className="space-y-3 grow">
+                     <div className="bg-muted/30 rounded-lg p-3">
+                        <div className="text-muted-foreground text-xs mb-1">Filename</div>
+                         <div className="text-foreground font-mono text-xs break-all">{result.filename || "Unknown"}</div>
+                    </div>
+
+                    <div className="bg-muted/30 rounded-lg p-3 flex items-center justify-between">
                         <div className="flex flex-col">
-                            <div className="text-neutral-400 text-xs uppercase tracking-wide mb-1 flex items-center gap-2">
+                            <div className="text-muted-foreground text-xs mb-0.5 flex items-center gap-1.5">
                                 <Binary className="w-4 h-4 text-accent"/> Executable
                             </div>
-                            <div className="text-white font-medium">{boolToString(result.is_executable)}</div>
+                            <div className="text-white text-sm font-medium">{boolToString(result.is_executable)}</div>
                         </div>
                         {!result.is_executable && (
-                            <p className="text-red-400 text-sm max-w-xs text-right">
-                                Note: Non-executable file scanning is experimental.
-                            </p>
+                            <span className="text-[10px] text-red-400 bg-red-500/10 px-2 py-1 rounded">
+                                Experimental
+                            </span>
                         )}
                     </div>
 
-                    <div className="bg-popover rounded-lg p-3">
-                        <div className="text-neutral-400 text-xs uppercase tracking-wide mb-2 flex items-center gap-2">
-                            <Hash className="w-4 h-4 text-accent"/> File Hash (SHA256)
+                    <div className="bg-muted/30 rounded-lg p-3 mt-auto">
+                        <div className="text-muted-foreground text-xs mb-1 flex items-center gap-1.5">
+                            <Hash className="w-4 h-4 text-accent"/> SHA256 Hash
                         </div>
-                        <div className="text-neutral-300 font-mono text-sm break-all bg-card p-3 rounded">
+                        <div className="text-neutral-300 font-mono text-[10px] break-all leading-tight">
                             {result.file_hash || "Not available"}
                         </div>
                     </div>
@@ -189,60 +187,73 @@ function SecurityAnalysis({result}: { result: ScanResult }) {
     const displayClassification = malwareClassification.includes("null") || malwareClassification.includes("Failed") ? 'Unable to classify' : malwareClassification;
 
     return (
-        <div className="bg-card/50 border border-border rounded-2xl">
-            <div className="p-6">
+        <div className="bg-card border border-border rounded-xl h-full flex flex-col">
+            <div className="p-4 flex flex-col h-full">
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-popover rounded-lg">
+                    <div className="p-2.5 bg-secondary/30 rounded-lg">
                         <Zap className="w-6 h-6 text-accent"/>
                     </div>
                     <div>
-                        <h3 className="text-lg font-semibold text-white">Security Analysis</h3>
-                        <p className="text-muted-foreground text-sm">Advanced threat detection metrics</p>
+                        <h3 className="font-semibold text-white text-lg">Security Analysis</h3>
+                        <p className="text-xs text-muted-foreground">Advanced detection metrics</p>
                     </div>
                 </div>
 
-                <div className="space-y-4">
-                    <div className="bg-popover rounded-lg p-4">
-                        <div className="flex justify-between items-center mb-2">
-                            <span className="text-muted-foreground flex items-center gap-2">
-                                <Footprints className="w-4 h-4 text-accent"/> N-Gram Score
-                            </span>
-                            <div className={`px-2 py-0.5 rounded-full text-xs font-medium ${ngram.color}`}>
-                                {result.ngram_score.toFixed(4)} ({ngram.level})
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 grow min-h-0">
+                    <div className="md:col-span-2 flex flex-col gap-3 h-full min-h-0">
+                        <div className="bg-muted/30 rounded-lg p-3 flex-1 flex flex-col justify-center min-h-0">
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-muted-foreground text-sm flex items-center gap-2">
+                                    <Footprints className="w-4 h-4 text-accent"/> N-Gram
+                                </span>
+                                <div className={`px-2 py-0.5 rounded text-xs font-medium ${ngram.color}`}>
+                                    {result.ngram_score.toFixed(4)}
+                                </div>
                             </div>
-                        </div>
-                        <div className="w-full bg-muted rounded-full h-1.5">
-                            <div className={`h-1.5 rounded-full ${ngram.barColor}`}
-                                 style={{width: `${ngramWidth}%`}}></div>
+                            <div className="w-full bg-background/50 rounded-full h-2 overflow-hidden">
+                                <div className={`h-full rounded-full ${ngram.barColor}`}
+                                     style={{width: `${ngramWidth}%`}}></div>
+                            </div>
                         </div>
 
                         {result.entropy !== 0.0 && (
-                            <>
-                                <div className="flex justify-between items-center mb-2 mt-4">
-                                    <span className="text-muted-foreground flex items-center gap-2">
-                                        <Tornado className="w-4 h-4 text-accent"/> Randomness Score (Entropy)
+                            <div className="bg-muted/30 rounded-lg p-3 flex-1 flex flex-col justify-center min-h-0">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="text-muted-foreground text-sm flex items-center gap-2">
+                                        <Tornado className="w-4 h-4 text-accent"/> Entropy
                                     </span>
-                                    <div className={`px-2 py-0.5 rounded-full text-xs font-medium ${entropy.color}`}>
-                                        {result.entropy.toFixed(2)} ({entropy.level})
+                                    <div className={`px-2 py-0.5 rounded text-xs font-medium ${entropy.color}`}>
+                                        {result.entropy.toFixed(2)}
                                     </div>
                                 </div>
-                                <div className="w-full bg-muted rounded-full h-1.5">
-                                    <div className={`h-1.5 rounded-full ${entropy.barColor}`}
+                                <div className="w-full bg-background/50 rounded-full h-2 overflow-hidden">
+                                    <div className={`h-full rounded-full ${entropy.barColor}`}
                                          style={{width: `${entropyWidth}%`}}></div>
                                 </div>
-                            </>
+                            </div>
+                        )}
+
+                        {result.longest_repeating_sequence > 0 && (
+                            <div className="bg-muted/30 rounded-lg p-3 flex-1 flex flex-col justify-center min-h-0">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-muted-foreground text-sm flex items-center gap-2">
+                                        <Ruler className="w-4 h-4 text-accent"/> Longest Sequence
+                                    </span>
+                                    <div className="px-2 py-0.5 rounded text-xs font-medium bg-primary/20 text-primary">
+                                        {result.longest_repeating_sequence}
+                                    </div>
+                                </div>
+                            </div>
                         )}
                     </div>
 
-                    <div className="bg-popover rounded-lg p-4">
-                        <div className="flex justify-between items-center">
-                            <span className="text-muted-foreground flex items-center gap-2">
-                                <Bug className="w-4 h-4 text-accent"/> Malware Classification
-                            </span>
-                            <div
-                                className={`px-3 py-1 rounded-full text-sm font-medium ${getMalwareColorClass(result.malware_type)}`}>
-                                {displayClassification}
-                            </div>
+                    <div className="md:col-span-1 bg-muted/30 rounded-lg p-3 flex flex-col justify-center items-center text-center h-full">
+                         <div className="text-muted-foreground text-sm mb-3 flex items-center gap-2">
+                            <Bug className="w-5 h-5 text-accent"/> Malware Classification
+                        </div>
+                        <div
+                            className={`px-4 py-3 rounded-lg text-center text-base font-medium w-full ${getMalwareColorClass(result.malware_type)}`}>
+                            {displayClassification}
                         </div>
                     </div>
                 </div>
@@ -253,87 +264,82 @@ function SecurityAnalysis({result}: { result: ScanResult }) {
 
 function StatisticalAnalysis({result}: { result: ScanResult }) {
     return (
-        <div className="bg-card/50 border border-border rounded-2xl">
-            <div className="p-6">
-                <div className="flex items-center gap-3 mb-4">
+        <div className="bg-card border border-border rounded-xl h-full flex flex-col">
+            <div className="p-4 flex flex-col h-full">
+                <div className="flex items-center gap-3 mb-3">
                     <div className="p-2 bg-secondary/30 rounded-lg">
-                        <Sigma className="w-6 h-6 text-foreground"/>
+                        <Sigma className="w-5 h-5 text-foreground"/>
                     </div>
                     <div>
-                        <h3 className="text-lg font-semibold text-white">Statistical Analysis</h3>
-                        <p className="text-muted-foreground text-sm">Low-level data distribution metrics</p>
+                        <div className="flex items-center gap-2">
+                            <h3 className="font-semibold text-white text-base">Statistical</h3>
+                            <span className="text-[10px] text-red-400 bg-red-500/10 px-1.5 py-0.5 rounded">
+                                Experimental
+                            </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">Data distribution</p>
                     </div>
                 </div>
 
-                <div className="space-y-3">
-                    <div className="flex justify-between items-center bg-popover rounded-lg p-3">
-                        <div className="flex items-center gap-3">
-                            <Percent className="w-5 h-5 text-accent"/>
-                            <span className="text-muted-foreground">Unique Byte Ratio</span>
+                <div className="grid grid-cols-2 gap-2 grow content-start">
+                    <div className="flex flex-col justify-center bg-muted/30 rounded-lg p-2">
+                        <div className="flex items-center gap-1.5 mb-1">
+                            <Percent className="w-3.5 h-3.5 text-accent"/>
+                            <span className="text-muted-foreground text-[10px]">Unique Ratio</span>
                         </div>
-                        <span className="text-foreground font-medium">{result.unique_byte_ratio.toFixed(2)}</span>
+                        <span className="text-foreground font-medium text-xs pl-5">{result.unique_byte_ratio.toFixed(2)}</span>
                     </div>
 
-                    <div className="flex justify-between items-center bg-popover rounded-lg p-3">
-                        <div className="flex items-center gap-3">
-                            <Ruler className="w-5 h-5 text-primary"/>
-                            <span className="text-muted-foreground">Longest Repeat Sequence</span>
+                    <div className="flex flex-col justify-center bg-muted/30 rounded-lg p-2">
+                        <div className="flex items-center gap-1.5 mb-1">
+                            <Scale className="w-3.5 h-3.5 text-accent"/>
+                            <span className="text-muted-foreground text-[10px]">Chi-Square</span>
                         </div>
-                        <span className="text-foreground font-medium">{result.longest_repeating_sequence} bytes</span>
+                        <span className="text-foreground font-medium text-xs pl-5">{result.chi_square_score.toFixed(2)}</span>
                     </div>
 
-                    <div className="flex justify-between items-center bg-popover rounded-lg p-3">
-                        <div className="flex items-center gap-3">
-                            <Scale className="w-5 h-5 text-accent"/>
-                            <span className="text-muted-foreground">Chi-Square Score</span>
+                    <div className="flex flex-col justify-center bg-muted/30 rounded-lg p-2 col-span-2">
+                         <div className="flex items-center gap-1.5 mb-1">
+                            <Activity className="w-3.5 h-3.5 text-accent"/>
+                            <span className="text-muted-foreground text-[10px]">Byte Anomaly</span>
                         </div>
-                        <span className="text-foreground font-medium">{result.chi_square_score.toFixed(2)}</span>
+                        <span className="text-foreground font-medium text-xs pl-5">{result.byte_frequency_anomaly.toFixed(4)}</span>
                     </div>
 
-                    <div className="flex justify-between items-center bg-popover rounded-lg p-3">
-                        <div className="flex items-center gap-3">
-                            <Activity className="w-5 h-5 text-accent"/>
-                            <span className="text-muted-foreground">Byte Frequency Anomaly</span>
-                        </div>
-                        <span className="text-foreground font-medium">{result.byte_frequency_anomaly.toFixed(6)}</span>
-                    </div>
-
-                    <div className="flex items-start gap-3 bg-popover rounded-lg p-3">
-                        <Telescope className="w-5 h-5 text-primary flex-shrink-0 mt-0.5"/>
-                        <div className="flex-grow">
-                            <div className="text-white font-medium mb-1">Steganography Indicators</div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground text-sm">Potential Hidden Data</span>
-                                <div
-                                    className={`px-2 py-0.5 rounded-full text-xs font-medium ${result.steganography_indicators_present ? 'bg-accent/20 text-accent' : 'bg-primary/20 text-primary'}`}>
-                                    {boolToString(result.steganography_indicators_present)}
-                                </div>
+                     <div className="bg-muted/30 rounded-lg p-2 col-span-2">
+                        <div className="flex justify-between items-center mb-1">
+                             <div className="flex items-center gap-1.5">
+                                <Telescope className="w-3.5 h-3.5 text-primary"/>
+                                <span className="text-muted-foreground text-[10px]">Steganography</span>
+                             </div>
+                             <div
+                                className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${result.steganography_indicators_present ? 'bg-accent/20 text-accent' : 'bg-primary/20 text-primary'}`}>
+                                {boolToString(result.steganography_indicators_present)}
                             </div>
-                            {result.steganography_indicators_present && (
-                                <p className="text-accent text-sm mt-1">
-                                    Score: {result.steganography_score.toFixed(3)}
-                                </p>
-                            )}
                         </div>
+                        {result.steganography_indicators_present && (
+                            <div className="text-right text-[10px] text-accent">
+                                Score: {result.steganography_score.toFixed(3)}
+                            </div>
+                        )}
                     </div>
 
                     {result.anomalous_patterns.length > 0 && (
-                        <div className="bg-popover rounded-lg p-3">
-                            <div className="flex items-center gap-3 mb-2">
-                                <AlertTriangle className="w-5 h-5 text-destructive"/>
-                                <div className="text-neutral-400 text-xs uppercase tracking-wide">Anomalous Patterns Detected</div>
+                        <div className="bg-muted/30 rounded-lg p-2 col-span-2 mt-auto">
+                            <div className="flex items-center gap-1.5 mb-1.5">
+                                <AlertTriangle className="w-3.5 h-3.5 text-destructive"/>
+                                <span className="text-[10px] text-muted-foreground">Patterns</span>
                             </div>
-                            <div className="space-y-1">
-                                {result.anomalous_patterns.map((pattern, i) => (
+                            <div className="flex flex-wrap gap-1">
+                                {result.anomalous_patterns.slice(0, 3).map((pattern, i) => (
                                     <span key={i}
-                                          className="inline-block bg-card text-xs text-destructive px-2 py-1 rounded-full mr-2">
+                                          className="bg-background text-[10px] text-destructive px-1.5 py-0.5 rounded border border-destructive/20">
                                         {pattern}
                                     </span>
                                 ))}
                             </div>
                         </div>
                     )}
-
                 </div>
             </div>
         </div>
@@ -346,43 +352,38 @@ function SuspiciousImports({result}: { result: ScanResult }) {
     );
 
     return (
-        <div className="bg-card/50 border border-border rounded-2xl">
-            <div className="p-6">
-                <div className="flex items-center gap-3 mb-4">
+        <div className="bg-card border border-border rounded-xl h-full flex flex-col">
+            <div className="p-4 h-full flex flex-col">
+                <div className="flex items-center gap-3 mb-3">
                     <div className="p-2 bg-destructive/20 rounded-lg">
-                        <Bug className="w-6 h-6 text-destructive"/>
+                        <Bug className="w-5 h-5 text-destructive"/>
                     </div>
                     <div>
-                        <h3 className="text-lg font-semibold text-white">Suspicious Imports</h3>
-                        <p className="text-muted-foreground text-sm">Potential indicators of compromise</p>
+                        <h3 className="font-semibold text-white text-base">Suspicious Imports</h3>
+                        <p className="text-xs text-muted-foreground">Indicators of compromise</p>
                     </div>
                 </div>
 
                 {suspiciousImports.length > 0 ? (
-                    <div className="space-y-3">
-                        <div className="flex items-center gap-2">
-                            <AlertTriangle className="w-4 h-4 text-destructive"/>
-                            <span className="text-destructive text-sm font-medium">
-                                Found {suspiciousImports.length} suspicious import{suspiciousImports.length > 1 ? 's' : ''}
+                    <div className="grow flex flex-col min-h-0">
+                        <div className="flex items-center gap-2 mb-2">
+                            <AlertTriangle className="w-3.5 h-3.5 text-destructive"/>
+                            <span className="text-destructive text-xs font-medium">
+                                Found {suspiciousImports.length} item{suspiciousImports.length > 1 ? 's' : ''}
                             </span>
                         </div>
-                        <div className="bg-popover rounded-lg p-3 max-h-64 overflow-y-auto space-y-3">
+                        <div className="bg-muted/30 rounded-lg p-2 overflow-y-auto grow space-y-1.5 custom-scrollbar">
                             {suspiciousImports.map((importName, i) => (
-                                <div key={i} className="bg-card p-3 rounded-lg flex justify-between items-center">
-                                    <span className="font-mono text-sm text-destructive">{importName}</span>
-                                    <div
-                                        className="bg-destructive/20 text-destructive text-xs px-2 py-0.5 rounded-full">
-                                        Import
-                                    </div>
+                                <div key={i} className="bg-background p-2 rounded border border-border flex justify-between items-center group hover:border-destructive/50 transition-colors">
+                                    <span className="font-mono text-[10px] text-destructive truncate mr-2">{importName}</span>
                                 </div>
                             ))}
                         </div>
                     </div>
                 ) : (
-                    <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 text-center">
-                        <ShieldCheck className="w-8 h-8 text-primary mx-auto mb-2"/>
-                        <p className="text-primary font-medium">No Suspicious Imports Found</p>
-                        <p className="text-muted-foreground text-sm">The file appears to contain no suspicious imports.</p>
+                    <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 text-center grow flex flex-col items-center justify-center">
+                        <ShieldCheck className="w-6 h-6 text-primary mb-2"/>
+                        <p className="text-primary text-sm font-medium">Clean</p>
                     </div>
                 )}
             </div>
@@ -481,28 +482,30 @@ export default function DashboardPage() {
     };
 
     return (
-        <div className={`bg-background text-white min-h-screen`}>
-            <div className="container mx-auto px-4 sm:px-6 py-8">
+        <div className={`bg-background text-white h-full md:h-[90vh] mt-5 overflow-y-auto md:overflow-hidden p-4`}>
+            <div className="max-w-[1600px] mx-auto h-full flex flex-col">
 
                 {loading && (
-                    <div className="flex flex-col items-center justify-center min-h-[80vh] space-y-6">
-                        <div
-                            className="w-16 h-16 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
-                        <div className="text-center">
-                            <h2 className="text-2xl font-semibold">Analyzing File</h2>
-                            <p className="text-muted-foreground">Please wait while the analysis is completed...</p>
+                    <div className="grow flex flex-col items-center justify-center space-y-8">
+                        <div className="relative w-20 h-20">
+                            <div className="absolute inset-0 border-4 border-muted rounded-full"></div>
+                            <div className="absolute inset-0 border-4 border-t-primary border-r-primary/50 border-b-transparent border-l-transparent rounded-full animate-spin"></div>
+                        </div>
+                        <div className="text-center space-y-2">
+                            <h2 className="text-2xl font-bold tracking-tight">Analyzing File</h2>
+                            <p className="text-muted-foreground text-sm">Scanning for threats and anomalies...</p>
                         </div>
                     </div>
                 )}
 
                 {error && !loading && (
-                    <div className="max-w-md mx-auto">
-                        <div className="bg-destructive/20 border mt-4 border-destructive/30 rounded-2xl p-6">
+                    <div className="max-w-md mx-auto mt-8">
+                        <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-6">
                             <div className="flex items-center gap-3">
-                                <AlertTriangle className="w-6 h-6 text-destructive"/>
+                                <AlertTriangle className="w-5 h-5 text-destructive"/>
                                 <div>
-                                    <h3 className="text-lg font-semibold text-destructive">Scan Error</h3>
-                                    <p className="text-destructive/80">{error}</p>
+                                    <h3 className="font-semibold text-destructive">Scan Error</h3>
+                                    <p className="text-sm text-destructive/80">{error}</p>
                                 </div>
                             </div>
                         </div>
@@ -510,7 +513,7 @@ export default function DashboardPage() {
                 )}
 
                 {!loading && !hasStartedScan && (
-                    <div className="flex flex-col items-center justify-center min-h-[80vh] text-center">
+                    <div className="grow flex flex-col items-center justify-center">
                         <div className="max-w-lg w-full space-y-6">
                             <Dropzone onFileChange={setSelectedFile}/>
                             <Button
@@ -537,32 +540,45 @@ export default function DashboardPage() {
 
                 {result && !loading && (
                     <motion.div initial="hidden" animate="visible"
-                                variants={resultContainerVariants} className="space-y-6">
+                                variants={resultContainerVariants} className="flex flex-col h-full pb-2">
+
                         <motion.div variants={resultItemVariants}
-                                    className="text-center">
-                            <h2 className="text-3xl font-bold text-white mt-6 mb-2">Scan Results</h2>
-                            <p className="text-muted-foreground">Comprehensive security analysis complete.</p>
-                            <Button onClick={resetScan} className="mt-4">
-                                <RotateCcw className="w-4 h-4 mr-2"/>
-                                Scan Another File
+                                    className="flex justify-between items-center mb-4 shrink-0">
+                            <div>
+                                <h2 className="text-xl font-bold text-white">Scan Results</h2>
+                                <p className="text-xs text-muted-foreground">{result.filename}</p>
+                            </div>
+                            <Button onClick={resetScan} variant="outline" size="sm" className="h-8">
+                                <RotateCcw className="w-3.5 h-3.5 mr-2"/>
+                                New Scan
                             </Button>
                         </motion.div>
 
-                        <motion.div variants={resultItemVariants}>
-                            <ThreatOverview result={result}/>
-                        </motion.div>
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 grow md:min-h-0 h-auto md:h-full">
+                            <div className="md:col-span-3 flex flex-col gap-3 h-auto md:h-full min-h-0">
+                                <motion.div variants={resultItemVariants} className="h-[220px] md:h-[45%]">
+                                    <ThreatOverview result={result}/>
+                                </motion.div>
+                                <motion.div variants={resultItemVariants} className="h-[280px] md:h-[55%]">
+                                    <FileProperties result={result}/>
+                                </motion.div>
+                            </div>
 
-                        <motion.div className="grid md:grid-cols-2 gap-6"
-                                    variants={resultItemVariants}>
-                            <FileProperties result={result}/>
-                            <SecurityAnalysis result={result}/>
-                        </motion.div>
+                             <div className="md:col-span-6 flex flex-col gap-3 h-auto md:h-full min-h-0">
+                                <motion.div variants={resultItemVariants} className="h-[300px] md:h-[40%]">
+                                    <SecurityAnalysis result={result}/>
+                                </motion.div>
+                                <motion.div variants={resultItemVariants} className="h-[400px] md:h-[60%]">
+                                    <SuspiciousImports result={result}/>
+                                </motion.div>
+                            </div>
 
-                        <motion.div className="grid md:grid-cols-2 gap-6"
-                                    variants={resultItemVariants}>
-                            <StatisticalAnalysis result={result}/>
-                            <SuspiciousImports result={result}/>
-                        </motion.div>
+                             <div className="md:col-span-3 flex flex-col gap-3 h-auto md:h-full min-h-0">
+                                <motion.div variants={resultItemVariants} className="h-[300px] md:h-full">
+                                    <StatisticalAnalysis result={result}/>
+                                </motion.div>
+                            </div>
+                        </div>
                     </motion.div>
                 )}
             </div>

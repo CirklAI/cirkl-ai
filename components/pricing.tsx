@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Check } from 'lucide-react';
+import { Check, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export default function Pricing() {
-    const [isAnnual, setIsAnnual] = useState(false);
+    const [isAnnual, setIsAnnual] = useState(true);
 
     const tiers = [
         {
@@ -21,6 +22,7 @@ export default function Pricing() {
                 'Zero data retention'
             ],
             cta: 'Get Essential',
+            featured: false,
         },
         {
             name: 'Pro',
@@ -32,10 +34,12 @@ export default function Pricing() {
             features: [
                 'Everything in Essential',
                 'Native desktop experience',
-                'Priority support'
+                'Priority support',
+                'Advanced heuristics'
             ],
             cta: 'Choose Pro',
-            featured: true
+            featured: true,
+            badge: 'Most Popular'
         },
         {
             name: 'Business',
@@ -47,96 +51,100 @@ export default function Pricing() {
             features: [
                 'Everything in Pro',
                 'Private cloud deployment',
-                'Scan in a blink¹'
+                'SLA guarantees'
             ],
-            cta: 'Talk to Sales',
+            cta: 'Contact Sales',
+            featured: false,
         },
     ];
 
     return (
-        <section className="py-32 bg-background">
-            <div className="max-w-6xl mx-auto px-6">
-                <div className="text-center mb-20">
-                    <h2 className="text-6xl font-bold text-foreground tracking-tight mb-6 leading-none">
-                        Ready when you are.
+        <section className="py-24 sm:py-32 relative overflow-hidden">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div className="text-center max-w-3xl mx-auto mb-16">
+                    <h2 className="text-5xl sm:text-6xl font-extrabold text-foreground tracking-tight mb-6">
+                        Simple, transparent pricing
                     </h2>
-                    <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                        Choose the plan that fits you perfectly.
+                    <p className="text-xl text-muted-foreground leading-relaxed mb-10">
+                        Choose the perfect plan for your security needs. <br className="hidden sm:block" />
+                        No hidden fees, ever.
                     </p>
-                </div>
 
-                <div className="flex justify-center mb-20">
-                    <div className="bg-muted rounded-full p-2">
-                        <button
-                            onClick={() => setIsAnnual(false)}
-                            className={`px-8 py-3 rounded-full text-base font-medium transition-all ${!isAnnual
-                                ? 'bg-primary text-primary-foreground shadow-sm'
-                                : 'text-muted-foreground hover:text-foreground'
-                                }`}
-                        >
+                    <div className="flex items-center justify-center gap-4">
+                        <span className={cn("text-sm font-medium transition-colors", !isAnnual ? "text-foreground" : "text-muted-foreground")}>
                             Monthly
-                        </button>
+                        </span>
                         <button
-                            onClick={() => setIsAnnual(true)}
-                            className={`px-8 py-3 rounded-full text-base font-medium transition-all ${isAnnual
-                                ? 'bg-primary text-primary-foreground shadow-sm'
-                                : 'text-muted-foreground hover:text-foreground'
-                                }`}
+                            onClick={() => setIsAnnual(!isAnnual)}
+                            className="relative h-8 w-14 rounded-full bg-muted transition-colors hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                            aria-checked={isAnnual}
+                            role="switch"
                         >
-                            Yearly
+                            <div
+                                className={cn(
+                                    "absolute top-1 left-1 h-6 w-6 rounded-full bg-background shadow-sm transition-transform duration-300",
+                                    isAnnual ? "translate-x-6" : "translate-x-0"
+                                )}
+                            />
                         </button>
+                        <span className={cn("text-sm font-medium transition-colors", isAnnual ? "text-foreground" : "text-muted-foreground")}>
+                            Yearly <span className="ml-1.5 inline-block px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider">Save 50%</span>
+                        </span>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-                    {tiers.map((tier, index) => (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto items-start">
+                    {tiers.map((tier) => (
                         <div
-                            key={index}
-                            className={`bg-card rounded-3xl border transition-all duration-300 hover:shadow-lg h-full flex flex-col ${tier.featured
-                                ? 'border-accent shadow-lg transform lg:scale-105'
-                                : 'border-border hover:border-primary/50'
-                                }`}
+                            key={tier.name}
+                            className={cn(
+                                "relative flex flex-col p-8 rounded-3xl border bg-card transition-all duration-300",
+                                tier.featured 
+                                    ? "border-primary/50 shadow-2xl lg:-mt-4 lg:-mb-4 z-10 bg-card/50 backdrop-blur-sm"
+                                    : "border-border hover:border-primary/20 hover:shadow-lg"
+                            )}
                         >
-                            <div className="p-10 flex flex-col flex-grow">
-                                <div className="text-center mb-10">
-                                    <h3 className="text-3xl font-bold text-card-foreground mb-4">
-                                        {tier.name}
-                                    </h3>
-                                    <div className="mb-4">
-                                        <span className="text-6xl font-bold text-card-foreground tracking-tight">
-                                            {isAnnual ? tier.price.annual : tier.price.monthly}
-                                        </span>
-                                        {tier.name !== 'Essential' && tier.name !== 'Max' && (
-                                            <span className="text-xl text-muted-foreground font-medium">
-                                                /month
-                                            </span>
-                                        )}
-                                    </div>
-                                    <p className="text-muted-foreground text-lg leading-relaxed">
-                                        {tier.description}
-                                    </p>
+                            {tier.featured && (
+                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary text-primary-foreground text-xs font-bold uppercase tracking-wider rounded-full flex items-center gap-1.5 shadow-sm">
+                                    <Sparkles className="w-3 h-3" />
+                                    {tier.badge}
                                 </div>
+                            )}
 
-                                <div className="space-y-6 mb-12 flex-grow">
-                                    {tier.features.map((feature, i) => (
-                                        <div key={i} className="flex items-start">
-                                            <Check className="w-6 h-6 text-primary mt-1 mr-4 flex-shrink-0" />
-                                            <span className="text-card-foreground text-lg leading-relaxed">
-                                                {feature}
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <Button
-                                    className={`w-full py-8 px-16 rounded-2xl text-lg font-semibold transition-all ${tier.featured
-                                        ? 'shadow-sm'
-                                        : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                                        }`}
-                                >
-                                    {tier.cta}
-                                </Button>
+                            <div className="mb-8">
+                                <h3 className="text-xl font-bold text-foreground">{tier.name}</h3>
+                                <p className="text-sm text-muted-foreground mt-2 min-h-10">{tier.description}</p>
                             </div>
+
+                            <div className="mb-8 flex items-baseline gap-1">
+                                <span className="text-4xl font-bold text-foreground tracking-tight">
+                                    {isAnnual ? tier.price.annual : tier.price.monthly}
+                                </span>
+                                {tier.price.monthly !== 'Free' && tier.price.monthly !== 'Custom' && (
+                                    <span className="text-muted-foreground">/mo</span>
+                                )}
+                            </div>
+
+                            <div className="flex-1 space-y-4 mb-8">
+                                {tier.features.map((feature) => (
+                                    <div key={feature} className="flex items-start gap-3">
+                                        <div className="shrink-0 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center mt-0.5">
+                                            <Check className="w-3 h-3 text-primary" />
+                                        </div>
+                                        <span className="text-sm text-muted-foreground leading-tight">{feature}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <Button 
+                                className={cn(
+                                    "w-full h-12 rounded-xl font-semibold text-base transition-all", 
+                                    tier.featured ? "shadow-primary/25 shadow-lg" : ""
+                                )}
+                                variant={tier.featured ? "default" : "outline"}
+                            >
+                                {tier.cta}
+                            </Button>
                         </div>
                     ))}
                 </div>
