@@ -523,7 +523,7 @@ export default function DashboardPage() {
                                         return;
                                     }
                                     if(!token) {
-                                        setError("Please sign in with the Login/Register button in sidebar");
+                                        setError("Please sign in with the Login/Register button in header");
                                         return;
                                     }
                                     scanFile(selectedFile).then();
